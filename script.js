@@ -13,8 +13,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ===== CẤU HÌNH GOOGLE SHEETS =====
-// URL Google Apps Script để lưu dữ liệu vào Google Sheets (Version 4 - CORS Fixed)
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby62wIKjlR7OpUR8R1Uk1Lwq9taJKTtHyY_sEDQ2bmkIrGGHH_DTUiZ3r3sHnWlnu-IxQ/exec';
+// URL Google Apps Script để lưu dữ liệu vào Google Sheets (Version 5 - No Phone)
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxA2sutfcH9HYKS3ItTHdS8pljpgMHVQgno2wTQ7zmnCpPGlQdfx7Y8DeJ8WOoV4ljg-w/exec';
 
 // Form submission handler
 document.getElementById('registrationForm').addEventListener('submit', function(e) {
@@ -29,7 +29,6 @@ document.getElementById('registrationForm').addEventListener('submit', function(
     // Get form data
     const formData = {
         fullname: document.getElementById('fullname').value,
-        zaloPhone: document.getElementById('zaloPhone').value,
         age: document.getElementById('age').value,
         position: document.getElementById('position').value || 'Không chia sẻ',
         message: document.getElementById('message').value || 'Không có'
