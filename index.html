@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cộng Đồng LGBT+ - Nơi Bạn Được Là Chính Mình</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>🏳️‍🌈 Cộng Đồng LGBT+</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Trang Chủ</a></li>
+                <li><a href="#about">Giới Thiệu</a></li>
+                <li><a href="#benefits">Quyền Lợi</a></li>
+                <li><a href="gallery.html">Hoạt Động</a></li>
+                <li><a href="#form">Đăng Ký</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2>🏳️‍🌈 Chào Mừng Đến Với Cộng Đồng LGBT+</h2>
+            <p>Một không gian an toàn để kết nối, chia sẻ và là chính mình</p>
+            <div class="cta-buttons">
+                <a href="#form" class="cta-button primary">Đăng Ký Ngay</a>
+                <a href="https://zalo.me/g/jvgoxt973" target="_blank" class="cta-button secondary">
+                    <span class="zalo-icon">💬</span> Tham Gia Zalo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Về Cộng Đồng Chúng Tôi</h2>
+            <p>Chúng tôi là một cộng đồng LGBT+ ấm áp và thân thiện trên Zalo. Đây là không gian an toàn để bạn được là chính mình, chia sẻ câu chuyện, tìm kiếm sự hỗ trợ và kết nối với những người hiểu bạn. Tất cả mọi người đều được chào đón với tình yêu thương và sự tôn trọng.</p>
+            
+            <div class="founders">
+                <h3>👥 Người Thành Lập Group</h3>
+                <div class="founders-list">
+                    <div class="founder-item">
+                        <span class="founder-icon">✨</span>
+                        <span class="founder-name">Khánh Nekk</span>
+                    </div>
+                    <div class="founder-item">
+                        <span class="founder-icon">✨</span>
+                        <span class="founder-name">Tr Cường</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="benefits" class="benefits">
+        <div class="container">
+            <h2>Tại Sao Nên Tham Gia?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="icon">🤗</div>
+                    <h3>Không Gian An Toàn</h3>
+                    <p>Được là chính mình mà không sợ bị phán xét</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">💖</div>
+                    <h3>Hỗ Trợ Tinh Thần</h3>
+                    <p>Nhận sự động viên và hỗ trợ từ cộng đồng</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">�</div>
+                    <h3>Kết Nối Bạn Bè</h3>
+                    <p>Gặp gỡ những người bạn hiểu và chia sẻ cùng bạn</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🎉</div>
+                    <h3>Sự Kiện & Hoạt Động</h3>
+                    <p>Tham gia các buổi gặp mặt và sự kiện cộng đồng</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">📚</div>
+                    <h3>Chia Sẻ Kiến Thức</h3>
+                    <p>Tìm hiểu về quyền lợi và các vấn đề LGBT+</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🔒</div>
+                    <h3>Bảo Mật & Riêng Tư</h3>
+                    <p>Thông tin của bạn được bảo vệ tuyệt đối</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="form" class="registration">
+        <div class="container">
+            <h2>Đăng Ký Tham Gia Cộng Đồng</h2>
+            <p class="form-description">Điền thông tin để tham gia group Zalo LGBT+ của chúng tôi. Mọi thông tin đều được bảo mật.</p>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="fullname">Họ và Tên *</label>
+                    <input type="text" id="fullname" name="fullname" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="age">Tuổi *</label>
+                    <input type="number" id="age" name="age" min="1" max="120" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="zaloPhone">Số Zalo *</label>
+                    <input type="tel" id="zaloPhone" name="zaloPhone" placeholder="Nhập đúng 10 số" pattern="[0-9]{10}" maxlength="10" required>
+                    <small style="color: #666; font-size: 0.85rem; margin-top: 5px; display: block;">⚠️ Phải nhập đủ 10 số</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="position">Vai Trò (Tùy Chọn)</label>
+                    <select id="position" name="position">
+                        <option value="">-- Chọn vai trò --</option>
+                        <option value="top">Top</option>
+                        <option value="bot">Bot</option>
+                        <option value="cent">Cent</option>
+                        <option value="prefer-not">Không muốn chia sẻ</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Giới Thiệu Bản Thân (Tùy Chọn)</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Chia sẻ về bản thân bạn nếu muốn... Đừng lo, đây là không gian an toàn! 🌈"></textarea>
+                </div>
+                
+                <div class="privacy-note">
+                    <p>🔒 Chúng tôi cam kết bảo vệ quyền riêng tư của bạn. Mọi thông tin đều được bảo mật tuyệt đối.</p>
+                </div>
+                
+                <button type="submit" class="submit-button">Gửi Đăng Ký</button>
+            </form>
+            <div id="successMessage" class="success-message" style="display: none;">
+                <p>🌈 Chào mừng bạn đến với cộng đồng! Chúng tôi sẽ thêm bạn vào group Zalo trong 24h.</p>
+                <p style="margin-top: 10px;">Hoặc <a href="https://zalo.me/g/jvgoxt973" target="_blank" style="color: #ff6b9d; font-weight: bold;">tham gia trực tiếp tại đây</a></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>🏳️‍🌈 Cộng Đồng LGBT+ - Nơi Bạn Được Là Chính Mình</p>
+            <p style="margin-top: 10px;">
+                <a href="https://zalo.me/g/jvgoxt973" target="_blank" style="color: #ff6b9d;">Tham gia group Zalo</a>
+            </p>
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Love is Love 💖 | Pride 🌈 | Equality ✊</p>
+        </div>
+    </footer>""
+
+    <script src="script.js"></script>
+</body>
+</html>
