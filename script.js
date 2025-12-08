@@ -13,8 +13,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ===== CẤU HÌNH GOOGLE SHEETS =====
-// URL Google Apps Script để lưu dữ liệu vào Google Sheets (Version 3 - Final)
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzWvzeeXFgjsgCkjUeHIfC6EK1Qo1f0DJ1PwdijINWvXsAPkwbCXfTKWJy8Cil7XBfa0g/exec';
+// URL Google Apps Script để lưu dữ liệu vào Google Sheets (Version 4 - CORS Fixed)
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby62wIKjlR7OpUR8R1Uk1Lwq9taJKTtHyY_sEDQ2bmkIrGGHH_DTUiZ3r3sHnWlnu-IxQ/exec';
 
 // Form submission handler
 document.getElementById('registrationForm').addEventListener('submit', function(e) {
