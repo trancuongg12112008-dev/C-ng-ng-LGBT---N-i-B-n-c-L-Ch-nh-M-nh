@@ -16,71 +16,74 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // URL Google Apps Script để lưu dữ liệu vào Google Sheets (Version 5 - No Phone)
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxA2sutfcH9HYKS3ItTHdS8pljpgMHVQgno2wTQ7zmnCpPGlQdfx7Y8DeJ8WOoV4ljg-w/exec';
 
-// Form submission handler
-document.getElementById('registrationForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Disable submit button to prevent double submission
-    const submitButton = this.querySelector('.submit-button');
-    const originalText = submitButton.textContent;
-    submitButton.disabled = true;
-    submitButton.textContent = 'Đang gửi...';
-    
-    // Get form data
-    const formData = {
-        fullname: document.getElementById('fullname').value,
-        age: document.getElementById('age').value,
-        position: document.getElementById('position').value || 'Không chia sẻ',
-        message: document.getElementById('message').value || 'Không có'
-    };
-    
-    // Check if Google Script URL is configured
-    if (GOOGLE_SCRIPT_URL === 'PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE') {
-        console.log('Form data (Google Sheets chưa được cấu hình):', formData);
-        alert('⚠️ Vui lòng cấu hình Google Sheets URL trong file script.js\nXem file HUONG_DAN_GOOGLE_SHEETS.md để biết chi tiết.');
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-        return;
-    }
-    
-    // Send data to Google Sheets
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(() => {
-        // Show success message
-        document.getElementById('successMessage').style.display = 'block';
+// Form submission handler - Only run if form exists
+const registrationForm = document.getElementById('registrationForm');
+if (registrationForm) {
+    registrationForm.addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        // Reset form
-        document.getElementById('registrationForm').reset();
+        // Disable submit button to prevent double submission
+        const submitButton = this.querySelector('.submit-button');
+        const originalText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Đang gửi...';
         
-        // Scroll to success message
-        document.getElementById('successMessage').scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
+        // Get form data
+        const formData = {
+            fullname: document.getElementById('fullname').value,
+            age: document.getElementById('age').value,
+            position: document.getElementById('position').value || 'Không chia sẻ',
+            message: document.getElementById('message').value || 'Không có'
+        };
+        
+        // Check if Google Script URL is configured
+        if (GOOGLE_SCRIPT_URL === 'PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE') {
+            console.log('Form data (Google Sheets chưa được cấu hình):', formData);
+            alert('⚠️ Vui lòng cấu hình Google Sheets URL trong file script.js\nXem file HUONG_DAN_GOOGLE_SHEETS.md để biết chi tiết.');
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+            return;
+        }
+        
+        // Send data to Google Sheets
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(() => {
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // Reset form
+            document.getElementById('registrationForm').reset();
+            
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            
+            // Re-enable button
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('successMessage').style.display = 'none';
+            }, 5000);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('❌ Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
         });
-        
-        // Re-enable button
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-        
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-            document.getElementById('successMessage').style.display = 'none';
-        }, 5000);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('❌ Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
     });
-});
+}
 
 // Add animation on scroll
 const observerOptions = {
@@ -104,3 +107,55 @@ document.querySelectorAll('.benefit-card').forEach(card => {
     card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     observer.observe(card);
 });
+
+
+// Mobile Menu Toggle - Ensure it runs after DOM is loaded
+function initMobileMenu() {
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    if (mobileMenuToggle && navLinks) {
+        // Toggle menu when clicking hamburger button
+        mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Menu toggle clicked'); // Debug
+            this.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking on ANY link (including page navigation)
+        const menuLinks = navLinks.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Don't prevent default for navigation links
+                // Close menu immediately
+                mobileMenuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = event.target.closest('nav');
+            if (!isClickInsideNav && navLinks.classList.contains('active')) {
+                mobileMenuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Prevent menu from closing when clicking inside nav (except on links)
+        navLinks.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'A') {
+                e.stopPropagation();
+            }
+        });
+        
+        console.log('Mobile menu initialized'); // Debug
+    } else {
+        console.log('Menu elements not found'); // Debug
+    }
+}
+
+// Initialize mobile menu
+initMobileMenu();

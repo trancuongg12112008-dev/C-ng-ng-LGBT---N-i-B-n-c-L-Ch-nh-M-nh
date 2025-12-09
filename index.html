@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cộng Đồng LGBT+ - Nơi Bạn Được Là Chính Mình</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,12 +15,19 @@
             <div class="logo">
                 <h1>🏳️‍🌈 Cộng Đồng LGBT+</h1>
             </div>
-            <ul class="nav-links">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Trang Chủ</a></li>
                 <li><a href="#about">Giới Thiệu</a></li>
                 <li><a href="#benefits">Quyền Lợi</a></li>
                 <li><a href="gallery.html">Hoạt Động</a></li>
+                <li><a href="rules.html">Luật Group</a></li>
                 <li><a href="#form">Đăng Ký</a></li>
+                <li><a href="admin.html" class="admin-link">🔐 Admin</a></li>
             </ul>
         </nav>
     </header>
@@ -27,10 +37,7 @@
             <h2>🏳️‍🌈 Chào Mừng Đến Với Cộng Đồng LGBT+</h2>
             <p>Một không gian an toàn để kết nối, chia sẻ và là chính mình</p>
             <div class="cta-buttons">
-                <a href="#form" class="cta-button primary">Đăng Ký Ngay</a>
-                <a href="https://zalo.me/g/jvgoxt973" target="_blank" class="cta-button secondary">
-                    <span class="zalo-icon">💬</span> Tham Gia Zalo
-                </a>
+                <a href="#form" class="cta-button primary">Đăng Ký Tham Gia Ngay</a>
             </div>
         </div>
     </section>
@@ -132,8 +139,12 @@
                 <button type="submit" class="submit-button">Gửi Đăng Ký</button>
             </form>
             <div id="successMessage" class="success-message" style="display: none;">
-                <p>🌈 Chào mừng bạn đến với cộng đồng! Chúng tôi sẽ thêm bạn vào group Zalo trong 24h.</p>
-                <p style="margin-top: 10px;">Hoặc <a href="https://zalo.me/g/jvgoxt973" target="_blank" style="color: #ff6b9d; font-weight: bold;">tham gia trực tiếp tại đây</a></p>
+                <p>🌈 Chào mừng bạn đến với cộng đồng!</p>
+                <p style="margin-top: 15px; font-size: 1.2rem;">
+                    <a href="https://zalo.me/g/jvgoxt973" target="_blank" class="join-group-button">
+                        💬 Tham Gia Group Zalo Ngay
+                    </a>
+                </p>
             </div>
         </div>
     </section>
@@ -141,10 +152,8 @@
     <footer>
         <div class="container">
             <p>🏳️‍🌈 Cộng Đồng LGBT+ - Nơi Bạn Được Là Chính Mình</p>
-            <p style="margin-top: 10px;">
-                <a href="https://zalo.me/g/jvgoxt973" target="_blank" style="color: #ff6b9d;">Tham gia group Zalo</a>
-            </p>
             <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Love is Love 💖 | Pride 🌈 | Equality ✊</p>
+            <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">📅 Thành lập: 08/12/2024 | Thiết kế và phát triển bởi By TrCuong.com</p>
         </div>
     </footer>""
 

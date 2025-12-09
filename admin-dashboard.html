@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Trị - Cộng Đồng LGBT+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>🏳️‍🌈 Cộng Đồng LGBT+</h1>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="javascript:history.back()" class="back-link">← Quay Về</a></li>
+                <li><a href="index.html">Trang Chủ</a></li>
+                <li><a href="admin-dashboard.html">Dashboard</a></li>
+                <li><a href="#" id="logoutBtn">🚪 Đăng Xuất</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="admin-dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2>👋 Xin chào, <span id="adminName">Admin</span>!</h2>
+                <p>Chào mừng đến trang quản trị</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-icon">📊</div>
+                    <h3>Xem Danh Sách Đăng Ký</h3>
+                    <p>Xem tất cả thành viên đã đăng ký qua form</p>
+                    <a href="https://docs.google.com/spreadsheets/d/1YAUE-Q-cf7row6itOEkHz29tWbXFOVUT4YY7T7WmoFU/edit" target="_blank" class="cta-button primary">
+                        Mở Google Sheets
+                    </a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-icon">📸</div>
+                    <h3>Quản Lý Hình Ảnh</h3>
+                    <p>Xem và quản lý hình ảnh được tải lên</p>
+                    <a href="https://forms.gle/FxdeqTwEfWjRheBG7" target="_blank" class="cta-button primary">
+                        Xem Google Form
+                    </a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-icon">⚙️</div>
+                    <h3>Cài Đặt</h3>
+                    <p>Cấu hình và quản lý website</p>
+                    <button class="cta-button" onclick="alert('Chức năng đang phát triển')">
+                        Cài Đặt
+                    </button>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-icon">📝</div>
+                    <h3>Hướng Dẫn</h3>
+                    <p>Xem hướng dẫn sử dụng và cập nhật</p>
+                    <a href="HUONG_DAN_GITHUB.md" class="cta-button">
+                        Xem Hướng Dẫn
+                    </a>
+                </div>
+            </div>
+
+            <div class="dashboard-info">
+                <h3>📌 Thông Tin Quan Trọng</h3>
+                <ul>
+                    <li><strong>Google Sheets:</strong> Lưu trữ thông tin đăng ký thành viên</li>
+                    <li><strong>Google Form:</strong> Thu thập hình ảnh hoạt động</li>
+                    <li><strong>GitHub Pages:</strong> Hosting website miễn phí</li>
+                    <li><strong>Zalo Group:</strong> <a href="https://zalo.me/g/jvgoxt973" target="_blank">https://zalo.me/g/jvgoxt973</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>🏳️‍🌈 Cộng Đồng LGBT+ - Nơi Bạn Được Là Chính Mình</p>
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Love is Love 💖 | Pride 🌈 | Equality ✊</p>
+            <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">📅 Thành lập: 08/12/2024 | Thiết kế và phát triển bởi By TrCuong.com</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>
