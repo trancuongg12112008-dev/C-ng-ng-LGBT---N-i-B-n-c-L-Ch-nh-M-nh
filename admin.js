@@ -1,8 +1,8 @@
 // Admin Login Configuration
 const ADMIN_CREDENTIALS = {
-    'admin': 'admin123',  // Thay đổi mật khẩu này!
-    'khanhnekk': 'khanh2024',
-    'trcuong': 'cuong2024'
+    'admin': 'admin2025',
+    'khanhnekk': 'khanhnekk2025',
+    'trcuong': 'trcuong2025'
 };
 
 // Check if already logged in

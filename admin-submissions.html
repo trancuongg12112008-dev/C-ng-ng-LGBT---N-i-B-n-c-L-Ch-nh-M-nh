@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoạt Động & Sự Kiện - Cộng Đồng LGBT+</title>
+    <title>Xem Bài Gửi - Cộng Đồng LGBT+</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -22,28 +22,18 @@
             </button>
             <ul class="nav-links" id="navLinks">
                 <li><a href="javascript:history.back()" class="back-link">← Quay Về</a></li>
-                <li><a href="index.html">Trang Chủ</a></li>
-                <li><a href="index.html#about">Giới Thiệu</a></li>
-                <li><a href="index.html#benefits">Quyền Lợi</a></li>
-                <li><a href="gallery.html">Hoạt Động</a></li>
-                <li><a href="rules.html">Luật Group</a></li>
-                <li><a href="index.html#form">Đăng Ký</a></li>
-                <li><a href="admin.html" class="admin-link">🔐 Admin</a></li>
+                <li><a href="admin-dashboard.html">Bảng Điều Khiển</a></li>
+                <li><a href="admin-activities.html">Quản Lý Hoạt Động</a></li>
+                <li><a href="#" id="logoutBtn">🚪 Đăng Xuất</a></li>
             </ul>
         </nav>
     </header>
 
-    <section class="gallery-hero">
-        <div class="hero-content">
-            <h2>📸 Hoạt Động & Sự Kiện</h2>
-            <p>Những khoảnh khắc đáng nhớ của cộng đồng chúng tôi</p>
-        </div>
-    </section>
-
-    <section class="gallery">
+    <section class="admin-submissions">
         <div class="container">
-            <div id="activitiesContainer">
-                <!-- Activities will be loaded here -->
+            <div id="activityTitle"></div>
+            <div id="submissionsList" class="submissions-list">
+                <p class="loading">Đang tải...</p>
             </div>
         </div>
     </section>
@@ -57,6 +47,6 @@
     </footer>
 
     <script src="script.js"></script>
-    <script src="gallery-photos.js"></script>
+    <script src="admin-submissions.js"></script>
 </body>
 </html>

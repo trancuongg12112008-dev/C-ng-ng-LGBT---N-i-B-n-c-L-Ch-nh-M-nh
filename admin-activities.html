@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Hoạt Động - Cộng Đồng LGBT+</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>🏳️‍🌈 Cộng Đồng LGBT+</h1>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="javascript:history.back()" class="back-link">← Quay Về</a></li>
+                <li><a href="index.html">Trang Chủ</a></li>
+                <li><a href="admin-dashboard.html">Bảng Điều Khiển</a></li>
+                <li><a href="#" id="logoutBtn">🚪 Đăng Xuất</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="admin-activities">
+        <div class="container">
+            <h2>🎯 Quản Lý Hoạt Động & Cuộc Thi</h2>
+            
+            <div class="activity-form-section">
+                <h3>➕ Tạo Hoạt Động/Cuộc Thi Mới</h3>
+                <form id="createActivityForm">
+                    <div class="form-group">
+                        <label for="activityTitle">Tên Hoạt Động/Cuộc Thi *</label>
+                        <input type="text" id="activityTitle" required placeholder="VD: Tết Của Bạn Như Nào?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activityType">Loại Tham Gia *</label>
+                        <select id="activityType" required>
+                            <option value="">-- Chọn loại --</option>
+                            <option value="photo">📸 Gửi Ảnh</option>
+                            <option value="text">✍️ Viết Bài</option>
+                            <option value="both">🖼️ Cả Ảnh và Bài Viết</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activityDescription">Mô Tả & Hướng Dẫn *</label>
+                        <textarea id="activityDescription" rows="4" required placeholder="Mô tả hoạt động và hướng dẫn tham gia..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="activityDeadline">Hạn Chót (tùy chọn)</label>
+                        <input type="date" id="activityDeadline">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="activityActive" checked>
+                            Kích hoạt ngay (thành viên có thể tham gia)
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="submit-button">Tạo Hoạt Động</button>
+                </form>
+            </div>
+
+            <div class="activities-list-section">
+                <h3>📋 Danh Sách Hoạt Động</h3>
+                <div id="activitiesList" class="activities-list">
+                    <p class="loading">Đang tải...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>🏳️‍🌈 Cộng Đồng LGBT+ - Nơi Bạn Được Là Chính Mình</p>
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Love is Love 💖 | Pride 🌈 | Equality ✊</p>
+            <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">📅 Thành lập: 08/12/2025 | Thiết kế và phát triển bởi By TrCuong.com</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="admin-activities.js"></script>
+</body>
+</html>
