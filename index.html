@@ -34,7 +34,6 @@
             <h2>🏳️‍🌈 Chào Mừng Đến Với Cộng Đồng LGBT+</h2>
             <p>Một không gian an toàn để kết nối, chia sẻ và là chính mình</p>
             <div class="cta-buttons">
-                <a href="#form" class="cta-button primary">Đăng Ký Tham Gia Ngay</a>
                 <a href="https://zalo.me/g/jvgoxt973" target="_blank" class="cta-button secondary">💬 Tham Gia Group Zalo</a>
             </div>
         </div>
@@ -99,62 +98,46 @@
         </div>
     </section>
 
-    <section id="form" class="registration">
-        <div class="container">
-            <h2>Đăng Ký Tham Gia Cộng Đồng</h2>
-            <p class="form-description">Điền thông tin để tham gia group Zalo LGBT+ của chúng tôi. Mọi thông tin đều được bảo mật.</p>
-            <form id="registrationForm">
-                <div class="form-group">
-                    <label for="fullname">Tên Zalo của bạn là gì? *</label>
-                    <input type="text" id="fullname" name="fullname" required placeholder="Tên hiển thị trên Zalo">
-                </div>
-                
-                <div class="form-group">
-                    <label for="age">Tuổi *</label>
-                    <input type="number" id="age" name="age" min="1" max="120" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="position">Vai Trò (Tùy Chọn)</label>
-                    <select id="position" name="position">
-                        <option value="">-- Chọn vai trò --</option>
-                        <option value="top">Top</option>
-                        <option value="bot">Bot</option>
-                        <option value="cent">Cent</option>
-                        <option value="prefer-not">Không muốn chia sẻ</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="message">Giới Thiệu Bản Thân (Tùy Chọn)</label>
-                    <textarea id="message" name="message" rows="5" placeholder="Chia sẻ về bản thân bạn nếu muốn... Đừng lo, đây là không gian an toàn! 🌈"></textarea>
-                </div>
-                
-                <div class="privacy-note">
-                    <p>🔒 Chúng tôi cam kết bảo vệ quyền riêng tư của bạn. Mọi thông tin đều được bảo mật tuyệt đối.</p>
-                </div>
-                
-                <button type="submit" class="submit-button">Gửi Đăng Ký</button>
-            </form>
-            <div id="successMessage" class="success-message" style="display: none;">
-                <p>🌈 Chào mừng bạn đến với cộng đồng!</p>
-                <p style="margin-top: 15px; font-size: 1.2rem;">
-                    <a href="https://zalo.me/g/jvgoxt973" target="_blank" class="join-group-button">
-                        💬 Tham Gia Group Zalo Ngay
-                    </a>
-                </p>
-            </div>
-        </div>
-    </section>
+
+
+
 
     <footer>
         <div class="container">
             <p>🏳️‍🌈 Cộng Đồng LGBT+ - Nơi Bạn Được Là Chính Mình</p>
             <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Love is Love 💖 | Pride 🌈 | Equality ✊</p>
             <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">📅 Thành lập: 08/12/2025 | Thiết kế và phát triển bởi By TrCuong.com</p>
+            
+
         </div>
-    </footer>""
+    </footer>
+
+    <!-- Activity Popup Modal -->
+    <div id="activityPopup" class="activity-popup-overlay">
+        <div class="activity-popup">
+            <button class="popup-close" id="closePopup">&times;</button>
+            <div class="popup-content">
+                <div class="popup-icon">🎮</div>
+                <h3>Hoạt Động Đang Diễn Ra!</h3>
+                <div class="popup-title">Trò Chơi Tháng 12</div>
+                <p class="popup-description">
+                    ✨ Tham gia các trò chơi thú vị trong tháng 12! Cùng nhau vui chơi, thử thách bản thân và kết nối với cộng đồng LGBT+ thân yêu.
+                </p>
+                <div class="popup-time">
+                    📅 <strong>12/12/2025 - 30/12/2025</strong>
+                </div>
+                <div class="popup-reward">
+                    🏆 Có phần thưởng đặc biệt!
+                </div>
+                <div class="popup-actions">
+                    <a href="gallery.html" class="popup-btn primary">📋 Xem Chi Tiết</a>
+                    <button class="popup-btn secondary" id="closePopupBtn">Để Sau</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
+    <script src="activity-popup.js"></script>
 </body>
 </html>
