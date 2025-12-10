@@ -4544,4 +4544,70 @@ header {
         padding: 14px 20px;
         font-size: 1rem;
     }
+    
+    /* Ensure all activity sections have proper styling on mobile */
+    .activity-time,
+    .member-only-notice,
+    .activity-rules,
+    .contest-rules-notice,
+    .result-announcement,
+    .award-ceremony {
+        background: white !important;
+        border: 2px solid #e9ecef !important;
+        border-radius: 15px !important;
+        padding: 15px !important;
+        margin: 15px 0 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Specific mobile fixes for each section */
+    .activity-time {
+        border-color: #bee5eb !important;
+        background: #e8f4fd !important;
+    }
+    
+    .member-only-notice {
+        border-color: #ffd700 !important;
+        background: #fff3cd !important;
+    }
+    
+    .activity-rules {
+        border-color: #dc3545 !important;
+        background: #f8f9fa !important;
+    }
+    
+    .contest-rules-notice {
+        border-color: #6c757d !important;
+        background: #e2e3e5 !important;
+    }
+    
+    .result-announcement {
+        border-color: #17a2b8 !important;
+        background: #d1ecf1 !important;
+    }
+    
+    .award-ceremony {
+        border-color: #28a745 !important;
+        background: #d4edda !important;
+    }
+    
+    /* Ensure text is visible on mobile */
+    .activity-time h4,
+    .member-only-notice p,
+    .activity-rules h4,
+    .contest-rules-notice h4,
+    .result-announcement h4,
+    .award-ceremony h4 {
+        color: #333 !important;
+        font-weight: 700 !important;
+    }
+    
+    .activity-time p,
+    .member-only-notice small,
+    .activity-rules li,
+    .contest-rules-notice p,
+    .result-announcement p,
+    .award-ceremony p {
+        color: #555 !important;
+    }
 }
