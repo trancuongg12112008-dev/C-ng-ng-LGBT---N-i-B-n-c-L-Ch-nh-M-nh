@@ -9,6 +9,8 @@ body {
     line-height: 1.7;
     color: #333;
     font-weight: 400;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
 }
 
 .container {
@@ -334,6 +336,9 @@ footer {
     transition: right 0.3s ease;
     box-shadow: -5px 0 15px rgba(0,0,0,0.2);
     list-style: none;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 999;
 }
 
 .nav-links.active {
@@ -370,6 +375,18 @@ footer {
     
     #registrationForm {
         padding: 2rem 1.5rem;
+    }
+    
+    /* Ensure mobile scrolling works properly */
+    body {
+        position: relative;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Fix mobile menu overlay issues */
+    .mobile-menu-toggle {
+        z-index: 1001;
     }
 }
 
