@@ -159,3 +159,95 @@ function initMobileMenu() {
 
 // Initialize mobile menu
 initMobileMenu();
+// Member Activity Info Handler
+document.addEventListener('DOMContentLoaded', function() {
+    const memberInfoBtn = document.getElementById('memberInfoBtn');
+    
+    if (memberInfoBtn) {
+        memberInfoBtn.addEventListener('click', function() {
+            // Create and show info modal
+            showMemberActivityInfo();
+        });
+    }
+});
+
+function showMemberActivityInfo() {
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'member-info-overlay';
+    overlay.innerHTML = `
+        <div class="member-info-modal">
+            <button class="modal-close" onclick="closeMemberInfo()">&times;</button>
+            <div class="modal-content">
+                <div class="modal-icon">🎯</div>
+                <h3>Thử Thách Bí Mật Tháng 12</h3>
+                <div class="modal-subtitle">Hoạt động độc quyền cho thành viên Group</div>
+                
+                <div class="info-section">
+                    <h4>🎮 Nội dung hoạt động:</h4>
+                    <ul>
+                        <li>Thử thách trí tuệ và sáng tạo hàng tuần</li>
+                        <li>Mini-game tương tác trong Group</li>
+                        <li>Chia sẻ câu chuyện cá nhân (tự nguyện)</li>
+                        <li>Voting cho hoạt động tháng sau</li>
+                    </ul>
+                </div>
+                
+                <div class="info-section">
+                    <h4>🏆 Phần thưởng:</h4>
+                    <ul>
+                        <li>Danh hiệu "Thành viên tích cực" trong Group</li>
+                        <li>Voucher quà tặng từ các đối tác</li>
+                        <li>Quyền ưu tiên tham gia sự kiện offline</li>
+                        <li>Badge đặc biệt trên profile Group</li>
+                    </ul>
+                </div>
+                
+                <div class="info-section">
+                    <h4>📋 Cách tham gia:</h4>
+                    <ol>
+                        <li>Tham gia Group Zalo chính thức</li>
+                        <li>Giới thiệu bản thân trong Group</li>
+                        <li>Chờ admin gửi link hoạt động riêng</li>
+                        <li>Hoàn thành thử thách đầu tiên</li>
+                    </ol>
+                </div>
+                
+                <div class="warning-note">
+                    <div class="warning-icon">⚠️</div>
+                    <p><strong>Lưu ý:</strong> Hoạt động này chỉ dành cho thành viên đã tham gia Group ít nhất 3 ngày và có tương tác tích cực.</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <a href="https://zalo.me/g/jvgoxt973" target="_blank" class="modal-btn primary">
+                        💬 Tham Gia Group Ngay
+                    </a>
+                    <button class="modal-btn secondary" onclick="closeMemberInfo()">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Show modal with animation
+    setTimeout(() => {
+        overlay.classList.add('show');
+    }, 10);
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMemberInfo() {
+    const overlay = document.querySelector('.member-info-overlay');
+    if (overlay) {
+        overlay.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(overlay);
+            document.body.style.overflow = '';
+        }, 300);
+    }
+}

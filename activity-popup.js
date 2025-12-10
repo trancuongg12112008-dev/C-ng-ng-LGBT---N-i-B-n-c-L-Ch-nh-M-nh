@@ -41,7 +41,16 @@ class ActivityPopup {
     }
 
     shouldShowPopup() {
-        // Always show popup every time user visits the page
+        // Check if contest has ended
+        const contestEndDate = new Date('2025-12-30T23:59:59');
+        const now = new Date();
+        
+        // Don't show popup if contest has ended
+        if (now > contestEndDate) {
+            return false;
+        }
+        
+        // Show popup if contest is still active
         return true;
     }
 
