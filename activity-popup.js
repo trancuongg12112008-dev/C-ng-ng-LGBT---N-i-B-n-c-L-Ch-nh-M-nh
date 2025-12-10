@@ -18,8 +18,15 @@ class ActivityPopup {
         this.closeBtn.addEventListener('click', () => this.hidePopup());
         this.closePopupBtn.addEventListener('click', () => this.hidePopup());
         
-        // Close on overlay click
+        // Close on overlay click/touch
         this.popup.addEventListener('click', (e) => {
+            if (e.target === this.popup) {
+                this.hidePopup();
+            }
+        });
+        
+        // Add touch support for mobile
+        this.popup.addEventListener('touchstart', (e) => {
             if (e.target === this.popup) {
                 this.hidePopup();
             }
@@ -42,13 +49,19 @@ class ActivityPopup {
         // Show popup after a short delay for better UX
         setTimeout(() => {
             this.popup.classList.add('show');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        }, 1000);
+            // Prevent background scrolling on mobile
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.style.width = '100%';
+        }, 1500);
     }
 
     hidePopup() {
         this.popup.classList.remove('show');
-        document.body.style.overflow = ''; // Restore scrolling
+        // Restore scrolling on mobile
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
         
         // No need to remember popup state - it will show again on next visit
     }
