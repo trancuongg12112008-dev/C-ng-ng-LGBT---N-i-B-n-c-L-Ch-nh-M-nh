@@ -368,7 +368,9 @@ class ChristmasCardGame {
             
             // Auto end game when time runs out
             if (timeLeft <= 0 && this.gameStarted) {
-                this.saveTimeoutResult();
+                this.saveTimeoutResult().catch(error => {
+                    console.error('Error saving timeout result:', error);
+                });
                 this.timeUp();
             }
         }, 1000);
@@ -479,7 +481,9 @@ class ChristmasCardGame {
             document.getElementById('victoryMessage').style.display = 'block';
             
             // Save game result to Google Sheets
-            this.saveGameResult();
+            this.saveGameResult().catch(error => {
+                console.error('Error saving game result:', error);
+            });
             
             // Create celebration effect
             this.createCelebration();
@@ -532,7 +536,7 @@ class ChristmasCardGame {
     
     getPlayerName() {
         // Try to get from localStorage first
-        let playerName = localStorage.getItem('christmasGamePlayerName');
+        let playerName = localStorage.getItem('christmasGameZaloName');
         
         if (!playerName) {
             // Use custom modal instead of prompt for better mobile support
@@ -610,7 +614,7 @@ class ChristmasCardGame {
         const handleSubmit = () => {
             const name = input.value.trim();
             if (name) {
-                localStorage.setItem('christmasGamePlayerName', name);
+                localStorage.setItem('christmasGameZaloName', name);
                 modal.remove();
                 callback(name);
             } else {
