@@ -743,12 +743,18 @@ class ChristmasMusicPlayer {
             this.music2.addEventListener('ended', () => this.switchTrack());
         }
         
+        // Check if running on GitHub Pages
+        const isGitHubPages = window.location.hostname.includes('github.io');
+        
         // Check if autoplay is requested from gallery page
         const urlParams = new URLSearchParams(window.location.search);
         const shouldAutoplay = urlParams.get('autoplay') === 'true';
         
-        if (shouldAutoplay) {
-            // Auto-start music immediately when coming from gallery
+        if (isGitHubPages) {
+            // On GitHub Pages, show manual music button
+            this.showMusicButton();
+        } else if (shouldAutoplay) {
+            // Auto-start music immediately when coming from gallery (local only)
             setTimeout(() => {
                 this.startMusic();
                 console.log('Auto-starting music from gallery navigation');
@@ -824,6 +830,17 @@ class ChristmasMusicPlayer {
     }
     
 
+    
+    showMusicButton() {
+        const enableBtn = document.getElementById('enableMusicBtn');
+        if (enableBtn) {
+            enableBtn.style.display = 'block';
+            enableBtn.addEventListener('click', () => {
+                this.startMusic();
+                enableBtn.style.display = 'none';
+            });
+        }
+    }
 }
 
 // Initialize music player

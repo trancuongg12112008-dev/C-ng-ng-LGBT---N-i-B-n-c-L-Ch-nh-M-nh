@@ -659,13 +659,22 @@
 
 
     <!-- Christmas Background Music -->
-    <audio id="christmasMusic1" loop preload="auto" autoplay>
-        <source src="ytmp3.gg - ytmp3.gg - Nhạc Chill Merry Christmas - Nhạc Giáng Sinh Chill Hay Nhất - Nhạc Noel Lofi Chill TikTok Nhẹ Nhàng - Will M.mp3" type="audio/mpeg">
+    <audio id="christmasMusic1" loop preload="auto">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
+        <!-- Fallback: Local file if available -->
+        <source src="christmas-music-1.mp3" type="audio/mpeg">
     </audio>
     
     <audio id="christmasMusic2" loop preload="auto">
-        <source src="Top 10 Christmas Songs with Lyrics 🎄 Merry Christmas 2024 Playlist 🎅.mp3" type="audio/mpeg">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-04.wav" type="audio/wav">
+        <!-- Fallback: Local file if available -->
+        <source src="christmas-music-2.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Music Enable Button for GitHub Pages -->
+    <div id="enableMusicBtn" style="position: fixed; top: 120px; right: 20px; z-index: 1000; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 30px; padding: 0.8rem 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4); transition: all 0.3s ease; font-size: 0.9rem; font-weight: bold; display: none;">
+        🎵 Bật Nhạc Giáng Sinh
+    </div>
 
 
 
