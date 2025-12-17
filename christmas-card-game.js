@@ -726,6 +726,15 @@ class ChristmasMusicPlayer {
         this.isPlaying = false;
         this.volume = 0.3; // Set volume to 30%
         
+        // Debug: Check if audio elements exist
+        console.log('Music1 element:', this.music1);
+        console.log('Music2 element:', this.music2);
+        
+        if (!this.music1 || !this.music2) {
+            console.error('Audio elements not found!');
+            return;
+        }
+        
         this.init();
     }
     
@@ -743,30 +752,35 @@ class ChristmasMusicPlayer {
             this.music2.addEventListener('ended', () => this.switchTrack());
         }
         
-        // Check if running on GitHub Pages
-        const isGitHubPages = window.location.hostname.includes('github.io');
+        // Always show music button on game page
+        this.showMusicButton();
         
         // Check if autoplay is requested from gallery page
         const urlParams = new URLSearchParams(window.location.search);
         const shouldAutoplay = urlParams.get('autoplay') === 'true';
         
-        if (isGitHubPages) {
-            // On GitHub Pages, show manual music button
-            this.showMusicButton();
-        } else if (shouldAutoplay) {
-            // Auto-start music immediately when coming from gallery (local only)
+        if (shouldAutoplay) {
+            // Try to auto-start music when coming from gallery
             setTimeout(() => {
                 this.startMusic();
+                const enableBtn = document.getElementById('enableMusicBtn');
+                if (enableBtn && this.isPlaying) {
+                    enableBtn.style.display = 'none';
+                }
                 console.log('Auto-starting music from gallery navigation');
             }, 500);
-        } else {
-            // Default behavior - wait for user interaction
-            document.addEventListener('click', () => {
-                if (!this.isPlaying) {
-                    this.startMusic();
-                }
-            }, { once: true });
         }
+        
+        // Also allow manual start with any click
+        document.addEventListener('click', () => {
+            if (!this.isPlaying) {
+                this.startMusic();
+                const enableBtn = document.getElementById('enableMusicBtn');
+                if (enableBtn && this.isPlaying) {
+                    enableBtn.style.display = 'none';
+                }
+            }
+        }, { once: true });
     }
     
     toggleMusic() {
@@ -780,20 +794,36 @@ class ChristmasMusicPlayer {
     startMusic() {
         try {
             const currentMusic = this.currentTrack === 1 ? this.music1 : this.music2;
+            console.log('Attempting to start music, current track:', this.currentTrack);
+            console.log('Current music element:', currentMusic);
+            
             if (currentMusic) {
-                // Force autoplay
+                // Reset and prepare audio
+                currentMusic.currentTime = 0;
                 currentMusic.muted = false;
-                currentMusic.play().then(() => {
+                currentMusic.volume = this.volume;
+                
+                // Try to play
+                const playPromise = currentMusic.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        this.isPlaying = true;
+                        console.log('Christmas music started successfully');
+                    }).catch(error => {
+                        console.log('Music autoplay prevented, trying alternative method:', error);
+                        this.forceAutoplay();
+                    });
+                } else {
+                    // Older browsers
                     this.isPlaying = true;
-                    console.log('Christmas music started automatically');
-                }).catch(error => {
-                    console.log('Music autoplay prevented, trying alternative method:', error);
-                    // Try alternative method
-                    this.forceAutoplay();
-                });
+                    console.log('Music started (older browser)');
+                }
+            } else {
+                console.error('No music element available');
             }
         } catch (error) {
-            console.log('Error playing music:', error);
+            console.error('Error playing music:', error);
             this.forceAutoplay();
         }
     }
@@ -833,12 +863,46 @@ class ChristmasMusicPlayer {
     
     showMusicButton() {
         const enableBtn = document.getElementById('enableMusicBtn');
+        const notification = document.getElementById('musicNotification');
+        
+        console.log('Showing music button, element found:', !!enableBtn);
+        
         if (enableBtn) {
             enableBtn.style.display = 'block';
-            enableBtn.addEventListener('click', () => {
+            enableBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Music button clicked');
+                
+                // Change button text to show it's working
+                enableBtn.innerHTML = '⏳ Đang Bật...';
+                
                 this.startMusic();
-                enableBtn.style.display = 'none';
+                
+                // Check after a short delay if music started
+                setTimeout(() => {
+                    if (this.isPlaying) {
+                        enableBtn.style.display = 'none';
+                        
+                        // Show notification
+                        if (notification) {
+                            notification.style.display = 'block';
+                            setTimeout(() => {
+                                notification.style.display = 'none';
+                            }, 3000);
+                        }
+                        console.log('Music started successfully, hiding button');
+                    } else {
+                        // If music didn't start, change button text
+                        enableBtn.innerHTML = '🔄 Thử Lại';
+                        setTimeout(() => {
+                            enableBtn.innerHTML = '🎵 Bật Nhạc Giáng Sinh';
+                        }, 2000);
+                        console.log('Music failed to start, showing retry option');
+                    }
+                }, 1000);
             });
+        } else {
+            console.error('Music button element not found!');
         }
     }
 }
@@ -846,7 +910,13 @@ class ChristmasMusicPlayer {
 // Initialize music player
 let musicPlayer;
 document.addEventListener('DOMContentLoaded', () => {
+    // Wait for all elements to be loaded
     setTimeout(() => {
-        musicPlayer = new ChristmasMusicPlayer();
-    }, 1000); // Delay to ensure audio elements are loaded
+        try {
+            musicPlayer = new ChristmasMusicPlayer();
+            console.log('Music player initialized successfully');
+        } catch (error) {
+            console.error('Error initializing music player:', error);
+        }
+    }, 2000); // Increased delay to ensure audio elements are loaded
 });
