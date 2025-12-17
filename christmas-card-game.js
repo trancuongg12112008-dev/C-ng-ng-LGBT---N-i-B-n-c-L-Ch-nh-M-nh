@@ -486,9 +486,9 @@ class ChristmasCardGame {
         }, 1000);
     }
     
-    saveGameResult() {
-        // Get player name
-        const playerName = this.getPlayerName();
+    async saveGameResult() {
+        // Get player name (async)
+        const playerName = await this.getPlayerName();
         if (!playerName) return; // User cancelled
         
         // Collect game data
@@ -508,9 +508,9 @@ class ChristmasCardGame {
         this.submitToGoogleSheets(gameData);
     }
     
-    saveTimeoutResult() {
-        // Get player name
-        const playerName = this.getPlayerName();
+    async saveTimeoutResult() {
+        // Get player name (async)
+        const playerName = await this.getPlayerName();
         if (!playerName) return; // User cancelled
         
         // Collect timeout data
@@ -535,24 +535,122 @@ class ChristmasCardGame {
         let playerName = localStorage.getItem('christmasGamePlayerName');
         
         if (!playerName) {
-            // Prompt for name with nice styling
-            playerName = prompt(
-                '🎄 CHÚC MỪNG! 🎄\n\n' +
-                '🏆 Bạn đã hoàn thành trò chơi!\n' +
-                '📊 Nhập tên để lưu kết quả vào bảng xếp hạng:\n\n' +
-                '(Tên sẽ được lưu cho lần chơi tiếp theo)'
-            );
-            
-            if (playerName && playerName.trim()) {
-                playerName = playerName.trim();
-                // Save to localStorage for next time
-                localStorage.setItem('christmasGamePlayerName', playerName);
-            } else {
-                return null; // User cancelled or empty name
-            }
+            // Use custom modal instead of prompt for better mobile support
+            return new Promise((resolve) => {
+                this.showNameInputModal(resolve);
+            });
         }
         
-        return playerName;
+        return Promise.resolve(playerName);
+    }
+    
+    showNameInputModal(callback) {
+        // Create modal overlay
+        const modal = document.createElement('div');
+        modal.id = 'nameInputModal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 10002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        `;
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 90%;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        `;
+        
+        modalContent.innerHTML = `
+            <h2 style="color: #c0392b; margin-bottom: 1rem; font-size: 1.8rem;">🎄 CHÚC MỪNG! 🎄</h2>
+            <p style="color: #2c3e50; margin-bottom: 1.5rem; font-size: 1.1rem;">
+                🏆 Bạn đã hoàn thành trò chơi!<br>
+                📊 Nhập tên Zalo để lưu kết quả vào bảng xếp hạng:
+            </p>
+            <input type="text" id="playerNameInput" placeholder="Nhập tên Zalo của bạn..." 
+                style="width: 100%; padding: 1rem; border: 2px solid #e74c3c; border-radius: 10px; font-size: 1rem; margin-bottom: 1rem; box-sizing: border-box; text-align: center;">
+            <p style="color: #7f8c8d; font-size: 0.85rem; margin-bottom: 1.5rem;">
+                (Tên Zalo sẽ được lưu cho lần chơi tiếp theo)
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button id="cancelNameBtn" style="background: #95a5a6; color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; font-weight: bold; cursor: pointer;">
+                    ❌ Bỏ qua
+                </button>
+                <button id="submitNameBtn" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; font-weight: bold; cursor: pointer;">
+                    ✅ Lưu
+                </button>
+            </div>
+        `;
+        
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // Focus input
+        const input = document.getElementById('playerNameInput');
+        setTimeout(() => input.focus(), 100);
+        
+        // Handle submit
+        const submitBtn = document.getElementById('submitNameBtn');
+        const cancelBtn = document.getElementById('cancelNameBtn');
+        
+        const handleSubmit = () => {
+            const name = input.value.trim();
+            if (name) {
+                localStorage.setItem('christmasGamePlayerName', name);
+                modal.remove();
+                callback(name);
+            } else {
+                input.style.borderColor = '#e74c3c';
+                input.placeholder = 'Vui lòng nhập tên Zalo!';
+                input.focus();
+            }
+        };
+        
+        const handleCancel = () => {
+            modal.remove();
+            callback(null);
+        };
+        
+        submitBtn.addEventListener('click', handleSubmit);
+        cancelBtn.addEventListener('click', handleCancel);
+        
+        // Submit on Enter key
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSubmit();
+            }
+        });
+        
+        // Add animations
+        if (!document.querySelector('#modalAnimations')) {
+            const style = document.createElement('style');
+            style.id = 'modalAnimations';
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideUp {
+                    from { transform: translateY(50px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
     }
     
     getCompletionTime() {
