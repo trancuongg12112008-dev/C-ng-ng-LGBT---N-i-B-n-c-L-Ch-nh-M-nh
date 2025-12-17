@@ -1,14 +1,94 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoạt Động & Sự Kiện - Cộng Đồng LGBT+</title>
+    <title>🎄 Hoạt Động Giáng Sinh - Cộng Đồng LGBT+</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: rgba(255,255,255,0.8);
+            font-size: 1.2rem;
+            animation: snowfall linear infinite;
+            pointer-events: none;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        @keyframes snowfall {
+            0% { 
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .snowflake:nth-child(1) { animation-duration: 3s; }
+        .snowflake:nth-child(2) { animation-duration: 4s; }
+        .snowflake:nth-child(3) { animation-duration: 3.5s; }
+        .snowflake:nth-child(4) { animation-duration: 5s; }
+        .snowflake:nth-child(5) { animation-duration: 4.5s; }
+        .snowflake:nth-child(6) { animation-duration: 3.2s; }
+        .snowflake:nth-child(7) { animation-duration: 4.8s; }
+        .snowflake:nth-child(8) { animation-duration: 3.8s; }
+        .snowflake:nth-child(9) { animation-duration: 4.2s; }
+
+        .cta-button:hover {
+            background: #e67e22 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.5) !important;
+        }
+
+        .activity-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15) !important;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        @media (max-width: 768px) {
+            .activity-stats {
+                flex-direction: column !important;
+                gap: 1rem;
+            }
+            
+            .activity-stats > div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                border: none !important;
+                padding: 1rem;
+                background: rgba(255,255,255,0.8);
+                border-radius: 15px;
+                margin: 0 0.5rem;
+            }
+        }
+    </style>
 </head>
+
 <body>
     <header>
         <nav>
@@ -25,102 +105,120 @@
                 <li><a href="index.html">Trang Chủ</a></li>
                 <li><a href="gallery.html">Hoạt Động</a></li>
                 <li><a href="rules.html">Luật Group</a></li>
-                <li><a href="index.html#form">Đăng Ký</a></li>
+
             </ul>
         </nav>
     </header>
 
-    <section class="gallery-hero">
+    <section class="gallery-hero" style="background: linear-gradient(135deg, #2c3e50, #34495e); position: relative; overflow: hidden;">
         <div class="hero-content">
-            <h2>📸 Hoạt Động & Sự Kiện</h2>
-            <p>Những khoảnh khắc đáng nhớ của cộng đồng chúng tôi</p>
+            <h2>🎄 Hoạt Động Giáng Sinh 2025 🎅</h2>
+            <p>✨ Tham gia các hoạt động đặc biệt mùa Giáng Sinh cùng cộng đồng! ✨</p>
+        </div>
+        <div class="christmas-decorations">
+            <div class="snowflake" style="left: 10%; animation-delay: 0s;">❄️</div>
+            <div class="snowflake" style="left: 20%; animation-delay: 1s;">❅</div>
+            <div class="snowflake" style="left: 30%; animation-delay: 2s;">❆</div>
+            <div class="snowflake" style="left: 40%; animation-delay: 0.5s;">🌟</div>
+            <div class="snowflake" style="left: 50%; animation-delay: 1.5s;">✨</div>
+            <div class="snowflake" style="left: 60%; animation-delay: 2.5s;">❄️</div>
+            <div class="snowflake" style="left: 70%; animation-delay: 0.8s;">❅</div>
+            <div class="snowflake" style="left: 80%; animation-delay: 1.8s;">❆</div>
+            <div class="snowflake" style="left: 90%; animation-delay: 2.2s;">🌟</div>
         </div>
     </section>
 
     <section class="gallery">
         <div class="container">
-            <h2 class="gallery-title">🎯 Hoạt Động Đang Diễn Ra</h2>
+            <h2 class="gallery-title">🎄 Hoạt Động Giáng Sinh Đặc Biệt 🎄</h2>
             
-            <div class="activity-card">
-                <div class="activity-header">
-                    <h3>🎮 Trò Chơi Tháng 12</h3>
-                    <span class="activity-badge">🔥 Sắp Diễn Ra</span>
+            <div class="activity-card christmas-card"
+                style="background: #ffffff; color: #2c3e50; border: 3px solid #e74c3c; box-shadow: 0 10px 30px rgba(231, 76, 60, 0.2); position: relative; overflow: hidden; border-radius: 20px; padding: 0;">
+                <div class="christmas-border" style="position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #e74c3c, #f39c12, #27ae60, #3498db, #9b59b6);"></div>
+                
+                <div class="activity-header" style="padding: 2.5rem 2.5rem 1rem; text-align: center;">
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                        <h3 style="margin: 0; font-size: 1.8rem; color: #c0392b; font-weight: 800; text-shadow: 2px 2px 4px rgba(192, 57, 43, 0.2); letter-spacing: 0.5px;">🎄 Trò Chơi Lật Thẻ Giáng Sinh 🎅</h3>
+                        <span class="activity-badge" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; padding: 0.6rem 1.4rem; border-radius: 30px; font-size: 0.95rem; font-weight: bold; white-space: nowrap; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4); animation: pulse 2s infinite;">🎮 Đang Diễn Ra</span>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #fff5f5, #ffffff); padding: 1.5rem; border-radius: 15px; border: 2px solid #ffeaea; margin-top: 1rem;">
+                        <p class="activity-description" style="margin: 0; font-size: 1.15rem; line-height: 1.8; color: #2c3e50; font-weight: 500; text-align: center;">
+                            🎯 <strong>Thử thách trí nhớ</strong> với trò chơi lật thẻ mang phong cách Giáng Sinh!<br>
+                            <span style="color: #e74c3c; font-weight: 600;">✨ Tìm các cặp thẻ giống nhau trong 50 giây để chiến thắng và tích lũy điểm ✨</span>
+                        </p>
+                        <div style="margin-top: 1rem; padding: 1.2rem; background: linear-gradient(135deg, #fff3cd, #ffeaa7); border-radius: 10px; border: 2px solid #f39c12; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.2); max-width: 100%; box-sizing: border-box;">
+                            <p style="margin: 0; font-size: 0.95rem; color: #b7791f; font-weight: 600; text-align: center; line-height: 1.4; word-wrap: break-word; hyphens: auto;">
+                                👑 <strong>Hoạt Động Này Chỉ Dành Cho Thành Viên Trong Gr</strong> 👑
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 
-                <p class="activity-description">
-                    Tham gia các trò chơi thú vị trong tháng 12! Cùng nhau vui chơi và kết nối với cộng đồng.
-                </p>
-                
-                <div class="activity-time">
-                    <h4>📅 Thời Gian Diễn Ra</h4>
-                    <p>Từ <strong>12/12/2025</strong> đến hết <strong>30/12/2025</strong></p>
+                <div class="activity-stats" style="display: flex; justify-content: space-around; margin: 0 2.5rem 2rem; background: linear-gradient(135deg, #f8f9fa, #ffffff); padding: 2rem; border-radius: 20px; border: 3px solid #e9ecef; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+                    <div style="text-align: center; flex: 1; padding: 0.5rem;">
+                        <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.8rem; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);">
+                            <span style="font-size: 1.4rem; font-weight: 800;">🏆</span>
+                        </div>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: #e74c3c; margin-bottom: 0.4rem; text-shadow: 2px 2px 4px rgba(231, 76, 60, 0.2);">15-30</div>
+                        <div style="font-size: 1rem; color: #495057; font-weight: 700; letter-spacing: 0.5px;">Điểm/Lượt</div>
+                    </div>
+                    <div style="text-align: center; flex: 1; padding: 0.5rem; border-left: 3px solid #dee2e6; border-right: 3px solid #dee2e6;">
+                        <div style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.8rem; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);">
+                            <span style="font-size: 1.4rem; font-weight: 800;">⏰</span>
+                        </div>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: #f39c12; margin-bottom: 0.4rem; text-shadow: 2px 2px 4px rgba(243, 156, 18, 0.2);">50s</div>
+                        <div style="font-size: 1rem; color: #495057; font-weight: 700; letter-spacing: 0.5px;">Thời Gian</div>
+                    </div>
+                    <div style="text-align: center; flex: 1; padding: 0.5rem;">
+                        <div style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.8rem; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);">
+                            <span style="font-size: 1.4rem; font-weight: 800;">🎴</span>
+                        </div>
+                        <div style="font-size: 1.8rem; font-weight: 800; color: #27ae60; margin-bottom: 0.4rem; text-shadow: 2px 2px 4px rgba(39, 174, 96, 0.2);">8</div>
+                        <div style="font-size: 1rem; color: #495057; font-weight: 700; letter-spacing: 0.5px;">Cặp Thẻ</div>
+                    </div>
                 </div>
                 
-                <div class="result-announcement">
-                    <h4>🏆 Công Bố Kết Quả</h4>
-                    <p><strong>1/1/2026</strong> - Ngày đầu năm mới</p>
-                    <small>Kết quả sẽ được thông báo trong Group Zalo</small>
-                </div>
-                
-                <div class="award-ceremony">
-                    <h4>🎉 Trao Giải</h4>
-                    <p><strong>2/1/2026</strong> - Trao giải và đăng lên trang hoạt động</p>
-                </div>
-                
-                <div class="member-only-notice">
-                    <div class="notice-icon">👑</div>
-                    <p><strong>Chỉ dành cho thành viên đã tham gia Group Zalo</strong></p>
-                </div>
-                
-                <div class="activity-rules">
-                    <h4>📋 Quy định quan trọng:</h4>
-                    <ul>
-                        <li><strong>🔒 Hệ thống chỉ nhận bài dự thi từ thành viên trong Group</strong></li>
-                        <li><strong>⚠️ Bài dự thi từ người ngoài sẽ bị tự động xóa</strong></li>
-                        <li><strong>🚫 Không có thông báo trước khi xóa bài vi phạm</strong></li>
-                        <li>Ban tổ chức có quyền kiểm tra tư cách thành viên</li>
-                    </ul>
-                </div>
-                
-                <div class="contest-rules-notice">
-                    <h4>📜 Quy Định & Thể Lệ</h4>
-                    <p>Quy định chi tiết và thể lệ cuộc thi sẽ được công bố trong <strong>Group Zalo</strong></p>
-                    <small>Vui lòng tham gia Group để nhận thông tin đầy đủ</small>
-                </div>
-                
-                <div class="activity-features">
-                    <span class="feature">⚡ Thử thách thú vị</span>
-                    <span class="feature">🤝 Kết nối cộng đồng</span>
-                    <span class="feature">🎊 Không giới hạn độ tuổi</span>
-                </div>
-                
-                <div class="activity-reward">
-                    <h4>🏆 Phần Thưởng</h4>
-                    <p>💎 Quà tặng đặc biệt cho người chiến thắng!</p>
-                </div>
-                
-                <div class="activity-actions">
-                    <a href="coming-soon.html" class="cta-button">
-                        🚀 Tham Gia Ngay
+                <div class="activity-actions" style="padding: 0 2.5rem 2.5rem; text-align: center;">
+                    <a href="christmas-card-game.html?autoplay=true" class="cta-button" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 1.5rem 4rem; border-radius: 40px; text-decoration: none; font-weight: 800; display: inline-block; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(231, 76, 60, 0.5); font-size: 1.2rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); letter-spacing: 1px; position: relative; overflow: hidden; text-align: center;">
+                        <span style="position: relative; z-index: 2; display: block; text-align: center;">🎮 Chơi Ngay 🎄</span>
+                        <div style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation: shimmer 2s infinite;"></div>
                     </a>
                 </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem; padding: 2.5rem; background: #ffffff; border-radius: 20px; border: 3px solid #f39c12; box-shadow: 0 10px 30px rgba(243, 156, 18, 0.2);">
+                <h3 style="color: #c0392b; margin-bottom: 1.2rem; font-size: 1.5rem; font-weight: 800; text-shadow: 1px 1px 2px rgba(192, 57, 43, 0.1);">🎁 Sắp Ra Mắt</h3>
+                <p style="color: #2c3e50; margin-bottom: 1.5rem; font-size: 1.1rem; font-weight: 500; line-height: 1.6;">Thêm nhiều hoạt động Giáng Sinh thú vị đang được chuẩn bị!</p>
+                <div style="display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin: 2rem 0;">
+                    <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #f8f9fa, #ffffff); border-radius: 15px; border: 2px solid #e9ecef; min-width: 100px;">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.8rem;">🎵</div>
+                        <div style="font-size: 1rem; color: #495057; font-weight: 600;">Nhạc Giáng Sinh</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #f8f9fa, #ffffff); border-radius: 15px; border: 2px solid #e9ecef; min-width: 100px;">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.8rem;">🎨</div>
+                        <div style="font-size: 1rem; color: #495057; font-weight: 600;">Trang Trí Ảnh</div>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #f8f9fa, #ffffff); border-radius: 15px; border: 2px solid #e9ecef; min-width: 100px;">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.8rem;">🎪</div>
+                        <div style="font-size: 1rem; color: #495057; font-weight: 600;">Mini Games</div>
+                    </div>
+                </div>
+                <p style="margin-top: 2rem; font-size: 1rem; color: #6c757d; font-style: italic; font-weight: 500;">
+                    🌟 Hãy theo dõi để không bỏ lỡ những hoạt động mới! 🌟
+                </p>
             </div>
 
 
         </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>🏳️‍🌈 Cộng Đồng LGBT+ - Nơi Bạn Được Là Chính Mình</p>
-            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Love is Love 💖 | Pride 🌈 | Equality ✊</p>
-            <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">📅 Thành lập: 08/12/2025 | Thiết kế và phát triển bởi By TrCuong.com</p>
-        </div>
-    </footer>
+
 
     <script src="script.js"></script>
     <script src="gallery-photos.js"></script>
-    <script src="event-status.js"></script>
-    <script src="contest-status.js"></script>
+
+
 </body>
+
 </html>

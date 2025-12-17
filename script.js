@@ -19,15 +19,15 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxA2sutfcH9HY
 // Form submission handler - Only run if form exists
 const registrationForm = document.getElementById('registrationForm');
 if (registrationForm) {
-    registrationForm.addEventListener('submit', function(e) {
+    registrationForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        
+
         // Disable submit button to prevent double submission
         const submitButton = this.querySelector('.submit-button');
         const originalText = submitButton.textContent;
         submitButton.disabled = true;
         submitButton.textContent = 'Đang gửi...';
-        
+
         // Get form data
         const formData = {
             fullname: document.getElementById('fullname').value,
@@ -35,7 +35,7 @@ if (registrationForm) {
             position: document.getElementById('position').value || 'Không chia sẻ',
             message: document.getElementById('message').value || 'Không có'
         };
-        
+
         // Check if Google Script URL is configured
         if (GOOGLE_SCRIPT_URL === 'PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE') {
             console.log('Form data (Google Sheets chưa được cấu hình):', formData);
@@ -44,7 +44,7 @@ if (registrationForm) {
             submitButton.textContent = originalText;
             return;
         }
-        
+
         // Send data to Google Sheets
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
@@ -54,34 +54,34 @@ if (registrationForm) {
             },
             body: JSON.stringify(formData)
         })
-        .then(() => {
-            // Show success message
-            document.getElementById('successMessage').style.display = 'block';
-            
-            // Reset form
-            document.getElementById('registrationForm').reset();
-            
-            // Scroll to success message
-            document.getElementById('successMessage').scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
+            .then(() => {
+                // Show success message
+                document.getElementById('successMessage').style.display = 'block';
+
+                // Reset form
+                document.getElementById('registrationForm').reset();
+
+                // Scroll to success message
+                document.getElementById('successMessage').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+
+                // Re-enable button
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 5000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('❌ Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
+                submitButton.disabled = false;
+                submitButton.textContent = originalText;
             });
-            
-            // Re-enable button
-            submitButton.disabled = false;
-            submitButton.textContent = originalText;
-            
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-                document.getElementById('successMessage').style.display = 'none';
-            }, 5000);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('❌ Có lỗi xảy ra khi gửi form. Vui lòng thử lại sau.');
-            submitButton.disabled = false;
-            submitButton.textContent = originalText;
-        });
     });
 }
 
@@ -91,7 +91,7 @@ const observerOptions = {
     rootMargin: '0px 0px -50px 0px'
 };
 
-const observer = new IntersectionObserver(function(entries) {
+const observer = new IntersectionObserver(function (entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.style.opacity = '1';
@@ -116,7 +116,7 @@ function initMobileMenu() {
 
     if (mobileMenuToggle && navLinks) {
         // Toggle menu when clicking hamburger button
-        mobileMenuToggle.addEventListener('click', function(e) {
+        mobileMenuToggle.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             console.log('Menu toggle clicked'); // Debug
@@ -127,7 +127,7 @@ function initMobileMenu() {
         // Close menu when clicking on ANY link (including page navigation)
         const menuLinks = navLinks.querySelectorAll('a');
         menuLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
+            link.addEventListener('click', function (e) {
                 // Don't prevent default for navigation links
                 // Close menu immediately
                 mobileMenuToggle.classList.remove('active');
@@ -136,7 +136,7 @@ function initMobileMenu() {
         });
 
         // Close menu when clicking outside
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             const isClickInsideNav = event.target.closest('nav');
             if (!isClickInsideNav && navLinks.classList.contains('active')) {
                 mobileMenuToggle.classList.remove('active');
@@ -145,12 +145,12 @@ function initMobileMenu() {
         });
 
         // Prevent menu from closing when clicking inside nav (except on links)
-        navLinks.addEventListener('click', function(e) {
+        navLinks.addEventListener('click', function (e) {
             if (e.target.tagName !== 'A') {
                 e.stopPropagation();
             }
         });
-        
+
         console.log('Mobile menu initialized'); // Debug
     } else {
         console.log('Menu elements not found'); // Debug
@@ -159,95 +159,3 @@ function initMobileMenu() {
 
 // Initialize mobile menu
 initMobileMenu();
-// Member Activity Info Handler
-document.addEventListener('DOMContentLoaded', function() {
-    const memberInfoBtn = document.getElementById('memberInfoBtn');
-    
-    if (memberInfoBtn) {
-        memberInfoBtn.addEventListener('click', function() {
-            // Create and show info modal
-            showMemberActivityInfo();
-        });
-    }
-});
-
-function showMemberActivityInfo() {
-    // Create modal overlay
-    const overlay = document.createElement('div');
-    overlay.className = 'member-info-overlay';
-    overlay.innerHTML = `
-        <div class="member-info-modal">
-            <button class="modal-close" onclick="closeMemberInfo()">&times;</button>
-            <div class="modal-content">
-                <div class="modal-icon">🎯</div>
-                <h3>Thử Thách Bí Mật Tháng 12</h3>
-                <div class="modal-subtitle">Hoạt động độc quyền cho thành viên Group</div>
-                
-                <div class="info-section">
-                    <h4>🎮 Nội dung hoạt động:</h4>
-                    <ul>
-                        <li>Thử thách trí tuệ và sáng tạo hàng tuần</li>
-                        <li>Mini-game tương tác trong Group</li>
-                        <li>Chia sẻ câu chuyện cá nhân (tự nguyện)</li>
-                        <li>Voting cho hoạt động tháng sau</li>
-                    </ul>
-                </div>
-                
-                <div class="info-section">
-                    <h4>🏆 Phần thưởng:</h4>
-                    <ul>
-                        <li>Danh hiệu "Thành viên tích cực" trong Group</li>
-                        <li>Voucher quà tặng từ các đối tác</li>
-                        <li>Quyền ưu tiên tham gia sự kiện offline</li>
-                        <li>Badge đặc biệt trên profile Group</li>
-                    </ul>
-                </div>
-                
-                <div class="info-section">
-                    <h4>📋 Cách tham gia:</h4>
-                    <ol>
-                        <li>Tham gia Group Zalo chính thức</li>
-                        <li>Giới thiệu bản thân trong Group</li>
-                        <li>Chờ admin gửi link hoạt động riêng</li>
-                        <li>Hoàn thành thử thách đầu tiên</li>
-                    </ol>
-                </div>
-                
-                <div class="warning-note">
-                    <div class="warning-icon">⚠️</div>
-                    <p><strong>Lưu ý:</strong> Hoạt động này chỉ dành cho thành viên đã tham gia Group ít nhất 3 ngày và có tương tác tích cực.</p>
-                </div>
-                
-                <div class="modal-actions">
-                    <a href="https://zalo.me/g/jvgoxt973" target="_blank" class="modal-btn primary">
-                        💬 Tham Gia Group Ngay
-                    </a>
-                    <button class="modal-btn secondary" onclick="closeMemberInfo()">
-                        Đóng
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(overlay);
-    
-    // Show modal with animation
-    setTimeout(() => {
-        overlay.classList.add('show');
-    }, 10);
-    
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden';
-}
-
-function closeMemberInfo() {
-    const overlay = document.querySelector('.member-info-overlay');
-    if (overlay) {
-        overlay.classList.remove('show');
-        setTimeout(() => {
-            document.body.removeChild(overlay);
-            document.body.style.overflow = '';
-        }, 300);
-    }
-}
