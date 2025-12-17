@@ -368,6 +368,7 @@ class ChristmasCardGame {
             
             // Auto end game when time runs out
             if (timeLeft <= 0 && this.gameStarted) {
+                this.saveTimeoutResult();
                 this.timeUp();
             }
         }, 1000);
@@ -477,11 +478,220 @@ class ChristmasCardGame {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('victoryMessage').style.display = 'block';
             
+            // Save game result to Google Sheets
+            this.saveGameResult();
+            
             // Create celebration effect
             this.createCelebration();
         }, 1000);
     }
     
+    saveGameResult() {
+        // Get player name
+        const playerName = this.getPlayerName();
+        if (!playerName) return; // User cancelled
+        
+        // Collect game data
+        const gameData = {
+            timestamp: new Date().toISOString(),
+            playerName: playerName,
+            score: this.calculateScore(),
+            completionTime: this.getCompletionTime(),
+            moves: this.moves,
+            matches: this.matches,
+            playDate: new Date().toLocaleDateString('vi-VN'),
+            device: this.getDeviceInfo(),
+            gameStatus: 'Hoàn thành'
+        };
+        
+        // Send to Google Sheets
+        this.submitToGoogleSheets(gameData);
+    }
+    
+    saveTimeoutResult() {
+        // Get player name
+        const playerName = this.getPlayerName();
+        if (!playerName) return; // User cancelled
+        
+        // Collect timeout data
+        const gameData = {
+            timestamp: new Date().toISOString(),
+            playerName: playerName,
+            score: 0,
+            completionTime: '00:50 (Hết giờ)',
+            moves: this.moves,
+            matches: this.matches,
+            playDate: new Date().toLocaleDateString('vi-VN'),
+            device: this.getDeviceInfo(),
+            gameStatus: 'Hết giờ'
+        };
+        
+        // Send to Google Sheets
+        this.submitToGoogleSheets(gameData);
+    }
+    
+    getPlayerName() {
+        // Try to get from localStorage first
+        let playerName = localStorage.getItem('christmasGamePlayerName');
+        
+        if (!playerName) {
+            // Prompt for name with nice styling
+            playerName = prompt(
+                '🎄 CHÚC MỪNG! 🎄\n\n' +
+                '🏆 Bạn đã hoàn thành trò chơi!\n' +
+                '📊 Nhập tên để lưu kết quả vào bảng xếp hạng:\n\n' +
+                '(Tên sẽ được lưu cho lần chơi tiếp theo)'
+            );
+            
+            if (playerName && playerName.trim()) {
+                playerName = playerName.trim();
+                // Save to localStorage for next time
+                localStorage.setItem('christmasGamePlayerName', playerName);
+            } else {
+                return null; // User cancelled or empty name
+            }
+        }
+        
+        return playerName;
+    }
+    
+    getCompletionTime() {
+        if (this.startTime) {
+            const endTime = Date.now();
+            const totalTime = Math.floor((endTime - this.startTime) / 1000);
+            const minutes = Math.floor(totalTime / 60);
+            const seconds = totalTime % 60;
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        return '00:00';
+    }
+    
+    getDeviceInfo() {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        return isMobile ? 'Điện thoại' : 'Máy tính';
+    }
+    
+    submitToGoogleSheets(data) {
+        // Google Apps Script Web App URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHIeV59xzjZKiQG5RD-nelcuoG4EAndlwYTTkrmHW9q-IOswiHuUKFGLnnEsAMUgi6/exec';
+        
+        // Prepare data for Google Sheets
+        const payload = {
+            action: 'addGameResult',
+            data: {
+                timestamp: data.timestamp,
+                playerName: data.playerName,
+                score: data.score,
+                completionTime: data.completionTime,
+                moves: data.moves,
+                matches: data.matches,
+                playDate: data.playDate,
+                device: data.device,
+                gameStatus: data.gameStatus
+            }
+        };
+        
+        // Send to Google Apps Script
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Changed from 'cors' to 'no-cors'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            console.log('📡 Request sent successfully (no-cors mode)');
+            // With no-cors, we can't read the response, but if we get here, the request was sent
+            console.log('✅ Kết quả đã được gửi đến Google Sheets');
+            this.showSaveNotification('✅ Đã gửi đến bảng xếp hạng!');
+        })
+        .catch(error => {
+            console.error('❌ Lỗi kết nối chi tiết:', error);
+            console.error('❌ Error name:', error.name);
+            console.error('❌ Error message:', error.message);
+            this.showSaveNotification('⚠️ Lỗi kết nối - Xem console');
+        });
+    }
+    
+    showSaveNotification(message) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 10001;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+            animation: slideInRight 0.5s ease;
+        `;
+        notification.textContent = message;
+        
+        // Add animation keyframes
+        if (!document.querySelector('#notificationStyles')) {
+            const style = document.createElement('style');
+            style.id = 'notificationStyles';
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        document.body.appendChild(notification);
+        
+        // Remove notification after 4 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 4000);
+    }
+    
+    // Test function để debug connection
+    testConnection() {
+        console.log('🧪 Testing connection to Google Apps Script...');
+        
+        const testData = {
+            action: 'addGameResult',
+            data: {
+                timestamp: new Date().toISOString(),
+                playerName: 'Test Player',
+                score: 99,
+                completionTime: '00:30',
+                moves: 15,
+                matches: 8,
+                playDate: new Date().toLocaleDateString('vi-VN'),
+                device: 'Test Device',
+                gameStatus: 'Test'
+            }
+        };
+        
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHIeV59xzjZKiQG5RD-nelcuoG4EAndlwYTTkrmHW9q-IOswiHuUKFGLnnEsAMUgi6/exec';
+        
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Changed from 'cors' to 'no-cors'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(testData)
+        })
+        .then(response => {
+            console.log('🧪 Test request sent successfully (no-cors mode)');
+            console.log('🧪 Cannot read response in no-cors mode, but request was sent');
+        })
+        .catch(error => {
+            console.error('🧪 Test connection failed:', error);
+        });
+    }
+
     createCelebration() {
         const celebrationEmojis = ['🎉', '🎊', '✨', '🌟', '💖', '🏳️‍🌈', '🎄', '🎅', '🤶', '🎁'];
         
