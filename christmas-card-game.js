@@ -744,12 +744,24 @@ class ChristmasMusicPlayer {
         
 
         
-        // Handle track ending (switch to next track)
+        // Handle track ending - ensure continuous looping
         if (this.music1) {
-            this.music1.addEventListener('ended', () => this.switchTrack());
+            this.music1.addEventListener('ended', () => {
+                if (this.isPlaying) {
+                    console.log('Music1 ended, restarting...');
+                    this.music1.currentTime = 0;
+                    this.music1.play().catch(e => console.log('Music1 loop failed:', e));
+                }
+            });
         }
         if (this.music2) {
-            this.music2.addEventListener('ended', () => this.switchTrack());
+            this.music2.addEventListener('ended', () => {
+                if (this.isPlaying) {
+                    console.log('Music2 ended, restarting...');
+                    this.music2.currentTime = 0;
+                    this.music2.play().catch(e => console.log('Music2 loop failed:', e));
+                }
+            });
         }
         
         // Always show music button on game page
@@ -798,21 +810,44 @@ class ChristmasMusicPlayer {
             console.log('Current music element:', currentMusic);
             
             if (currentMusic) {
-                // Reset and prepare audio
+                // Mobile-specific preparation
+                currentMusic.load(); // Reload the audio element
                 currentMusic.currentTime = 0;
                 currentMusic.muted = false;
                 currentMusic.volume = this.volume;
                 
-                // Try to play
+                // Add mobile-specific attributes
+                currentMusic.setAttribute('playsinline', 'true');
+                currentMusic.setAttribute('webkit-playsinline', 'true');
+                
+                // Try multiple methods for mobile compatibility
                 const playPromise = currentMusic.play();
                 
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
                         this.isPlaying = true;
                         console.log('Christmas music started successfully');
+                        
+                        // Ensure continuous looping
+                        this.ensureLooping();
+                        
+                        // Ensure it continues playing and loops on mobile
+                        currentMusic.addEventListener('pause', () => {
+                            if (this.isPlaying) {
+                                currentMusic.play().catch(e => console.log('Resume failed:', e));
+                            }
+                        });
+                        
+                        // Ensure looping works properly
+                        currentMusic.addEventListener('ended', () => {
+                            if (this.isPlaying) {
+                                currentMusic.currentTime = 0;
+                                currentMusic.play().catch(e => console.log('Loop failed:', e));
+                            }
+                        });
                     }).catch(error => {
-                        console.log('Music autoplay prevented, trying alternative method:', error);
-                        this.forceAutoplay();
+                        console.log('Music autoplay prevented, trying mobile-specific method:', error);
+                        this.mobilePlayFallback();
                     });
                 } else {
                     // Older browsers
@@ -824,7 +859,7 @@ class ChristmasMusicPlayer {
             }
         } catch (error) {
             console.error('Error playing music:', error);
-            this.forceAutoplay();
+            this.mobilePlayFallback();
         }
     }
     
@@ -841,7 +876,64 @@ class ChristmasMusicPlayer {
                 }, 100);
             }).catch(error => {
                 console.log('All autoplay methods failed:', error);
+                this.mobilePlayFallback();
             });
+        }
+    }
+    
+    mobilePlayFallback() {
+        // Mobile-specific fallback method
+        const currentMusic = this.currentTrack === 1 ? this.music1 : this.music2;
+        if (currentMusic) {
+            console.log('Trying mobile-specific play method');
+            
+            // Create a user interaction event listener
+            const playOnTouch = () => {
+                currentMusic.play().then(() => {
+                    this.isPlaying = true;
+                    console.log('Music started after user interaction');
+                    
+                    // Hide the music button if it exists
+                    const enableBtn = document.getElementById('enableMusicBtn');
+                    if (enableBtn) enableBtn.style.display = 'none';
+                    
+                    // Show notification
+                    const notification = document.getElementById('musicNotification');
+                    if (notification) {
+                        notification.style.display = 'block';
+                        setTimeout(() => {
+                            notification.style.display = 'none';
+                        }, 3000);
+                    }
+                }).catch(error => {
+                    console.log('Mobile play failed:', error);
+                });
+                
+                // Remove the event listener after first successful play
+                document.removeEventListener('touchstart', playOnTouch);
+                document.removeEventListener('click', playOnTouch);
+            };
+            
+            // Add event listeners for mobile touch and click
+            document.addEventListener('touchstart', playOnTouch, { once: true });
+            document.addEventListener('click', playOnTouch, { once: true });
+        }
+    }
+    
+    ensureLooping() {
+        // Method to ensure continuous looping
+        const currentMusic = this.currentTrack === 1 ? this.music1 : this.music2;
+        if (currentMusic && this.isPlaying) {
+            // Set loop attribute
+            currentMusic.loop = true;
+            
+            // Add additional safety check
+            setInterval(() => {
+                if (this.isPlaying && currentMusic.paused && !currentMusic.ended) {
+                    console.log('Music paused unexpectedly, restarting...');
+                    currentMusic.play().catch(e => console.log('Auto-restart failed:', e));
+                }
+            }, 5000); // Check every 5 seconds
         }
     }
     
@@ -852,10 +944,12 @@ class ChristmasMusicPlayer {
     }
     
     switchTrack() {
-        this.stopMusic();
-        this.currentTrack = this.currentTrack === 1 ? 2 : 1;
-        if (this.isPlaying) {
-            setTimeout(() => this.startMusic(), 1000); // 1 second gap between tracks
+        // Since we're using the same track for both, just restart current track
+        const currentMusic = this.currentTrack === 1 ? this.music1 : this.music2;
+        if (currentMusic && this.isPlaying) {
+            console.log('Restarting current track for continuous loop');
+            currentMusic.currentTime = 0;
+            currentMusic.play().catch(e => console.log('Track restart failed:', e));
         }
     }
     
@@ -864,14 +958,29 @@ class ChristmasMusicPlayer {
     showMusicButton() {
         const enableBtn = document.getElementById('enableMusicBtn');
         const notification = document.getElementById('musicNotification');
+        const mobileInstructions = document.getElementById('mobileInstructions');
         
         console.log('Showing music button, element found:', !!enableBtn);
         
+        // Check if on mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
         if (enableBtn) {
             enableBtn.style.display = 'block';
-            enableBtn.addEventListener('click', (e) => {
+            
+            // Show mobile instructions if on mobile
+            if (isMobile && mobileInstructions) {
+                mobileInstructions.style.display = 'block';
+                setTimeout(() => {
+                    mobileInstructions.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Handle both click and touch events
+            const handleMusicStart = (e) => {
                 e.preventDefault();
-                console.log('Music button clicked');
+                e.stopPropagation();
+                console.log('Music button activated');
                 
                 // Change button text to show it's working
                 enableBtn.innerHTML = '⏳ Đang Bật...';
@@ -893,14 +1002,17 @@ class ChristmasMusicPlayer {
                         console.log('Music started successfully, hiding button');
                     } else {
                         // If music didn't start, change button text
-                        enableBtn.innerHTML = '🔄 Thử Lại';
+                        enableBtn.innerHTML = '📱 Chạm Để Bật Nhạc';
                         setTimeout(() => {
                             enableBtn.innerHTML = '🎵 Bật Nhạc Giáng Sinh';
-                        }, 2000);
-                        console.log('Music failed to start, showing retry option');
+                        }, 3000);
+                        console.log('Music failed to start, showing mobile instruction');
                     }
                 }, 1000);
-            });
+            };
+            
+            enableBtn.addEventListener('click', handleMusicStart);
+            enableBtn.addEventListener('touchstart', handleMusicStart);
         } else {
             console.error('Music button element not found!');
         }
