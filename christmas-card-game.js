@@ -19,7 +19,7 @@ class ChristmasCardGame {
         this.startTime = null;
         
         // Daily play system
-        this.eventEndDate = new Date('2025-12-25T23:59:59');
+        this.eventEndDate = new Date('2025-12-26T23:59:59');
         this.hasPlayedToday = false;
         this.canPlay = true;
         
@@ -101,7 +101,7 @@ class ChristmasCardGame {
                 </div>
                 <div class="event-progress">
                     <div class="progress-text">🎄 Sự Kiện Giáng Sinh 2025 🎄</div>
-                    <div class="countdown-text">Kết thúc: 25/12/2025</div>
+                    <div class="countdown-text">Kết thúc: 26/12/2025</div>
                     <div style="margin-top: 10px; font-size: 0.85rem; opacity: 0.9;">
                         ⏰ Thử thách 50 giây: Ghép 8 cặp thẻ | 15-30 điểm
                     </div>
@@ -126,14 +126,26 @@ class ChristmasCardGame {
         const now = new Date();
         
         if (now > this.eventEndDate) {
-            // Event ended
+            // Event ended - Contest automatically closed
             this.gameBoard.innerHTML = `
                 <div class="event-ended">
-                    <h3>🎄 Sự Kiện Đã Kết Thúc 🎄</h3>
-                    <p>Cảm ơn bạn đã tham gia sự kiện Giáng Sinh!</p>
-                    <p>Tổng điểm của bạn: <strong>${localStorage.getItem('christmasGame_totalScore') || '0'}</strong></p>
-                    <div class="final-message">
-                        <p>🎅 Chúc bạn có một mùa Giáng Sinh an lành và hạnh phúc! 🎅</p>
+                    <h3>🎄 Cuộc Thi Đã Kết Thúc 🎄</h3>
+                    <p style="font-size: 1.1rem; color: #e74c3c; font-weight: 600; margin: 1rem 0;">
+                        ⏰ Sự kiện Giáng Sinh 2025 đã chính thức kết thúc vào 26/12/2025
+                    </p>
+                    <div style="background: linear-gradient(135deg, #f8f9fa, #ffffff); padding: 1.5rem; border-radius: 15px; border: 2px solid #e9ecef; margin: 1.5rem 0;">
+                        <p style="margin: 0.5rem 0; font-size: 1rem;">
+                            📊 <strong>Tổng điểm của bạn:</strong> <span style="color: #27ae60; font-size: 1.3rem; font-weight: bold;">${localStorage.getItem('christmasGame_totalScore') || '0'} điểm</span>
+                        </p>
+                        <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #6c757d;">
+                            🏆 Cảm ơn bạn đã tham gia và cống hiến cho cộng đồng!
+                        </p>
+                    </div>
+                    <div class="final-message" style="background: linear-gradient(135deg, #fff3cd, #ffeaa7); padding: 1.2rem; border-radius: 10px; border: 2px solid #f39c12;">
+                        <p style="margin: 0; font-size: 1rem; color: #b7791f; font-weight: 600;">
+                            🎅 Chúc bạn có một mùa Giáng Sinh an lành và hạnh phúc! 🎄<br>
+                            🌟 Hẹn gặp lại trong các sự kiện tiếp theo! 🌟
+                        </p>
                     </div>
                 </div>
             `;
@@ -476,7 +488,7 @@ class ChristmasCardGame {
                     🏆 Càng nhanh càng nhiều điểm (15-30 điểm)
                 </div>
             `;
-            document.getElementById('victoryMessage').querySelector('h3').textContent = '🎄 Hoàn Thành Lượt Chơi Hôm Nay! 🎄';
+            document.getElementById('victoryMessage').querySelector('h3').textContent = '🎉 Chúc Mừng Hoàn Thành! 🎉';
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('victoryMessage').style.display = 'block';
             
@@ -491,61 +503,73 @@ class ChristmasCardGame {
     }
     
     async saveGameResult() {
-        // Get player name (async)
-        const playerName = await this.getPlayerName();
-        if (!playerName) return; // User cancelled
-        
-        // Collect game data
-        const gameData = {
-            timestamp: new Date().toISOString(),
-            playerName: playerName,
-            score: this.calculateScore(),
-            completionTime: this.getCompletionTime(),
-            moves: this.moves,
-            matches: this.matches,
-            playDate: new Date().toLocaleDateString('vi-VN'),
-            device: this.getDeviceInfo(),
-            gameStatus: 'Hoàn thành'
-        };
-        
-        // Send to Google Sheets
-        this.submitToGoogleSheets(gameData);
+        try {
+            const playerName = await this.getPlayerName();
+            if (!playerName) return;
+            
+            const gameData = {
+                timestamp: new Date().toISOString(),
+                playerName: playerName,
+                score: this.calculateScore(),
+                completionTime: this.getCompletionTime(),
+                moves: this.moves,
+                matches: this.matches,
+                playDate: new Date().toLocaleDateString('vi-VN'),
+                device: this.getDeviceInfo(),
+                gameStatus: 'Hoàn thành'
+            };
+            
+            this.submitToGoogleSheets(gameData);
+        } catch (error) {
+            console.error('Error saving game result:', error);
+        }
     }
     
     async saveTimeoutResult() {
-        // Get player name (async)
-        const playerName = await this.getPlayerName();
-        if (!playerName) return; // User cancelled
+        try {
+            const playerName = await this.getPlayerName();
+            if (!playerName) return;
+            
+            const gameData = {
+                timestamp: new Date().toISOString(),
+                playerName: playerName,
+                score: 0,
+                completionTime: '00:50 (Hết giờ)',
+                moves: this.moves,
+                matches: this.matches,
+                playDate: new Date().toLocaleDateString('vi-VN'),
+                device: this.getDeviceInfo(),
+                gameStatus: 'Hết giờ'
+            };
+            
+            this.submitToGoogleSheets(gameData);
+        } catch (error) {
+            console.error('Error saving timeout result:', error);
+        }
+    }
+    
+    calculateScore() {
+        if (!this.startTime) return 0;
         
-        // Collect timeout data
-        const gameData = {
-            timestamp: new Date().toISOString(),
-            playerName: playerName,
-            score: 0,
-            completionTime: '00:50 (Hết giờ)',
-            moves: this.moves,
-            matches: this.matches,
-            playDate: new Date().toLocaleDateString('vi-VN'),
-            device: this.getDeviceInfo(),
-            gameStatus: 'Hết giờ'
-        };
+        const elapsed = Date.now() - this.startTime;
+        const totalSeconds = Math.floor(elapsed / 1000);
         
-        // Send to Google Sheets
-        this.submitToGoogleSheets(gameData);
+        if (totalSeconds <= 50) {
+            // Score for completing within 50 seconds (15-30 points)
+            const timeBonus = Math.floor((50 - totalSeconds) / 3.33); // 0-15 bonus
+            return 15 + Math.min(15, timeBonus); // 15-30 points
+        } else {
+            // No points for taking longer than 50 seconds
+            return 0;
+        }
     }
     
     getPlayerName() {
-        // Try to get from localStorage first
-        let playerName = localStorage.getItem('christmasGameZaloName');
-        
-        if (!playerName) {
-            // Use custom modal instead of prompt for better mobile support
-            return new Promise((resolve) => {
-                this.showNameInputModal(resolve);
-            });
-        }
-        
-        return Promise.resolve(playerName);
+        // Always show modal for name input - don't save to localStorage
+        console.log('🔍 Showing name input modal...');
+        return new Promise((resolve) => {
+            this.showNameInputModal(resolve);
+        });
     }
     
     showNameInputModal(callback) {
@@ -588,7 +612,7 @@ class ChristmasCardGame {
             <input type="text" id="playerNameInput" placeholder="Nhập tên Zalo của bạn..." 
                 style="width: 100%; padding: 1rem; border: 2px solid #e74c3c; border-radius: 10px; font-size: 1rem; margin-bottom: 1rem; box-sizing: border-box; text-align: center;">
             <p style="color: #7f8c8d; font-size: 0.85rem; margin-bottom: 1.5rem;">
-                (Tên Zalo sẽ được lưu cho lần chơi tiếp theo)
+                (Tên sẽ được ghi vào bảng xếp hạng cho lượt chơi này)
             </p>
             <div style="display: flex; gap: 1rem; justify-content: center;">
                 <button id="cancelNameBtn" style="background: #95a5a6; color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1rem; font-weight: bold; cursor: pointer;">
@@ -613,9 +637,39 @@ class ChristmasCardGame {
         
         const handleSubmit = () => {
             const name = input.value.trim();
+            console.log('🔍 Modal submit - entered name:', name);
+            
             if (name) {
-                localStorage.setItem('christmasGameZaloName', name);
+                // Don't save to localStorage - just return the name
+                console.log('✅ Using name for this session only:', name);
                 modal.remove();
+                
+                // Show immediate feedback
+                const tempNotification = document.createElement('div');
+                tempNotification.style.cssText = `
+                    position: fixed;
+                    top: 80px;
+                    right: 20px;
+                    background: linear-gradient(135deg, #3498db, #2980b9);
+                    color: white;
+                    padding: 1rem 1.5rem;
+                    border-radius: 25px;
+                    font-size: 0.9rem;
+                    font-weight: bold;
+                    z-index: 10002;
+                    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+                    animation: slideInRight 0.5s ease;
+                `;
+                tempNotification.textContent = '📤 Đang gửi kết quả...';
+                document.body.appendChild(tempNotification);
+                
+                // Remove temp notification after 2 seconds
+                setTimeout(() => {
+                    if (tempNotification.parentNode) {
+                        tempNotification.remove();
+                    }
+                }, 2000);
+                
                 callback(name);
             } else {
                 input.style.borderColor = '#e74c3c';
@@ -673,9 +727,92 @@ class ChristmasCardGame {
         return isMobile ? 'Điện thoại' : 'Máy tính';
     }
     
+    // Test function để kiểm tra kết nối Google Sheets
+    testGoogleSheetsConnection() {
+        console.log('🧪 Testing Google Sheets connection...');
+        console.log('🧪 Current URL:', 'https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec');
+        
+        const testData = {
+            timestamp: new Date().toISOString(),
+            playerName: 'Test Player - ' + Date.now(),
+            score: 25,
+            completionTime: '00:30',
+            moves: 15,
+            matches: 8,
+            playDate: new Date().toLocaleDateString('vi-VN'),
+            device: 'Test Device',
+            gameStatus: 'Test Connection'
+        };
+        
+        console.log('🧪 Test data:', testData);
+        this.submitToGoogleSheets(testData);
+    }
+    
+    // Debug function để kiểm tra Apps Script response
+    async testWithResponse() {
+        console.log('🔍 Testing with detailed response...');
+        
+        const testData = {
+            timestamp: new Date().toISOString(),
+            playerName: 'Debug Test - ' + Date.now(),
+            score: 30,
+            completionTime: '00:25',
+            moves: 12,
+            matches: 8,
+            playDate: new Date().toLocaleDateString('vi-VN'),
+            device: 'Debug Device',
+            gameStatus: 'Debug Test'
+        };
+        
+        const payload = {
+            action: 'addGameResult',
+            data: testData
+        };
+        
+        console.log('🔍 Sending payload:', payload);
+        
+        try {
+            // Try with CORS mode first to see response
+            const response = await fetch('https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec', {
+                method: 'POST',
+                mode: 'cors', // Try CORS first
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            console.log('🔍 Response status:', response.status);
+            console.log('🔍 Response headers:', response.headers);
+            
+            const responseText = await response.text();
+            console.log('🔍 Response text:', responseText);
+            
+        } catch (corsError) {
+            console.log('🔍 CORS failed, trying no-cors:', corsError.message);
+            
+            // Fallback to no-cors
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                console.log('🔍 No-cors request sent successfully');
+                
+            } catch (noCorsError) {
+                console.error('🔍 Both CORS and no-cors failed:', noCorsError);
+            }
+        }
+    }
+    
     submitToGoogleSheets(data) {
-        // Google Apps Script Web App URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHIeV59xzjZKiQG5RD-nelcuoG4EAndlwYTTkrmHW9q-IOswiHuUKFGLnnEsAMUgi6/exec';
+        // Google Apps Script Web App URL - Updated to new deployment
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec';
         
         // Prepare data for Google Sheets
         const payload = {
@@ -693,45 +830,57 @@ class ChristmasCardGame {
             }
         };
         
+        console.log('📤 Sending data to Google Sheets:', payload);
+        
         // Send to Google Apps Script
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', // Changed from 'cors' to 'no-cors'
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload)
         })
         .then(response => {
-            console.log('📡 Request sent successfully (no-cors mode)');
-            // With no-cors, we can't read the response, but if we get here, the request was sent
-            console.log('✅ Kết quả đã được gửi đến Google Sheets');
-            this.showSaveNotification('✅ Đã gửi đến bảng xếp hạng!');
+            // Note: In no-cors mode, we can't read the response
+            // But if we reach here, the request was sent successfully
+            console.log('✅ Request sent to Google Sheets (no-cors mode)');
+            this.showSaveNotification('✅ Đã lưu vào bảng xếp hạng!');
         })
         .catch(error => {
-            console.error('❌ Lỗi kết nối chi tiết:', error);
-            console.error('❌ Error name:', error.name);
-            console.error('❌ Error message:', error.message);
-            this.showSaveNotification('⚠️ Lỗi kết nối - Xem console');
+            console.error('❌ Error sending to Google Sheets:', error);
+            console.error('❌ Error details:', error.message);
+            console.error('❌ Data that failed to send:', payload);
+            this.showSaveNotification('⚠️ Lỗi kết nối - Kiểm tra mạng');
         });
     }
     
     showSaveNotification(message) {
         // Create notification element
         const notification = document.createElement('div');
+        
+        // Style based on message type
+        const isSuccess = message.includes('✅');
+        const backgroundColor = isSuccess ? 
+            'linear-gradient(135deg, #27ae60, #2ecc71)' : 
+            'linear-gradient(135deg, #e74c3c, #c0392b)';
+        
         notification.style.cssText = `
             position: fixed;
-            top: 20px;
+            top: 80px;
             right: 20px;
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            background: ${backgroundColor};
             color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 25px;
-            font-size: 0.9rem;
+            padding: 1.2rem 2rem;
+            border-radius: 30px;
+            font-size: 1rem;
             font-weight: bold;
-            z-index: 10001;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
-            animation: slideInRight 0.5s ease;
+            z-index: 10002;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            animation: slideInRight 0.6s ease;
+            max-width: 300px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         `;
         notification.textContent = message;
         
@@ -741,8 +890,28 @@ class ChristmasCardGame {
             style.id = 'notificationStyles';
             style.textContent = `
                 @keyframes slideInRight {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
+                    from { 
+                        transform: translateX(100%); 
+                        opacity: 0; 
+                        scale: 0.8;
+                    }
+                    to { 
+                        transform: translateX(0); 
+                        opacity: 1; 
+                        scale: 1;
+                    }
+                }
+                @keyframes slideOutRight {
+                    from { 
+                        transform: translateX(0); 
+                        opacity: 1; 
+                        scale: 1;
+                    }
+                    to { 
+                        transform: translateX(100%); 
+                        opacity: 0; 
+                        scale: 0.8;
+                    }
                 }
             `;
             document.head.appendChild(style);
@@ -750,11 +919,18 @@ class ChristmasCardGame {
         
         document.body.appendChild(notification);
         
-        // Remove notification after 4 seconds
+        // Remove notification after 5 seconds with animation
         setTimeout(() => {
-            notification.remove();
-        }, 4000);
+            notification.style.animation = 'slideOutRight 0.4s ease forwards';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 400);
+        }, 5000);
     }
+    
+
     
     // Test function để debug connection
     testConnection() {
@@ -775,7 +951,7 @@ class ChristmasCardGame {
             }
         };
         
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHIeV59xzjZKiQG5RD-nelcuoG4EAndlwYTTkrmHW9q-IOswiHuUKFGLnnEsAMUgi6/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec';
         
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
@@ -983,13 +1159,69 @@ class ChristmasCardGame {
 // Global functions
 let game;
 
+// Test function for Google Sheets
+function testGoogleSheets() {
+    if (game) {
+        game.testGoogleSheetsConnection();
+    } else {
+        console.log('Game not initialized yet');
+    }
+}
+
+// Debug function with detailed response
+function debugGoogleSheets() {
+    if (game) {
+        game.testWithResponse();
+    } else {
+        console.log('Game not initialized yet');
+    }
+}
+
+// Quick test function
+function quickTest() {
+    console.log('🚀 Quick test starting...');
+    
+    const testPayload = {
+        action: 'addGameResult',
+        data: {
+            timestamp: new Date().toISOString(),
+            playerName: 'Quick Test - ' + Date.now(),
+            score: 20,
+            completionTime: '00:40',
+            moves: 18,
+            matches: 8,
+            playDate: new Date().toLocaleDateString('vi-VN'),
+            device: 'Browser Console',
+            gameStatus: 'Quick Test'
+        }
+    };
+    
+    console.log('🚀 Sending:', testPayload);
+    
+    fetch('https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(testPayload)
+    })
+    .then(() => {
+        console.log('🚀 Quick test request sent!');
+        console.log('🚀 Check your Google Sheets for new data');
+    })
+    .catch(error => {
+        console.error('🚀 Quick test failed:', error);
+    });
+}
+
 function startNewGame() {
     // Check if can start new game
     const now = new Date();
-    const eventEndDate = new Date('2025-12-25T23:59:59');
+    const eventEndDate = new Date('2025-12-26T23:59:59');
     
     if (now > eventEndDate) {
-        alert('🎄 Sự kiện Giáng Sinh đã kết thúc! Cảm ơn bạn đã tham gia! 🎄');
+        alert('🎄 Cuộc Thi Giáng Sinh 2025 Đã Kết Thúc! 🎄\n\n⏰ Sự kiện đã chính thức đóng vào 26/12/2025\n🏆 Cảm ơn bạn đã tham gia!\n🌟 Hẹn gặp lại trong các hoạt động tiếp theo!');
         return;
     }
     
@@ -1007,9 +1239,34 @@ function closeVictory() {
     document.getElementById('victoryMessage').style.display = 'none';
 }
 
+function playAgain() {
+    // Close victory message
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('victoryMessage').style.display = 'none';
+    
+    // Reset and start new game
+    if (game) {
+        // Reset game state
+        game.reset();
+        
+        // Show start button for new game
+        game.showStartButton();
+        
+        // Update daily info to refresh scores
+        game.updateDailyInfo();
+        
+        console.log('🎮 New game ready to start!');
+    } else {
+        // If game object doesn't exist, create new one
+        game = new ChristmasCardGame();
+    }
+}
+
 // Initialize game when page loads
 document.addEventListener('DOMContentLoaded', () => {
     try {
+
+        
         // Ensure header is visible
         const gameHeader = document.querySelector('.game-header');
         if (gameHeader) {
@@ -1018,6 +1275,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         game = new ChristmasCardGame();
+        
+        // Make test functions globally available
+        window.testGoogleSheets = testGoogleSheets;
+        window.debugGoogleSheets = debugGoogleSheets;
+        window.quickTest = quickTest;
+        
     } catch (error) {
         console.error('Error initializing game:', error);
         // Fallback: create a simple board
