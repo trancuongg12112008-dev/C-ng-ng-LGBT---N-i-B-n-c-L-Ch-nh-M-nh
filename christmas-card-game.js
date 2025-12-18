@@ -730,7 +730,7 @@ class ChristmasCardGame {
     // Test function để kiểm tra kết nối Google Sheets
     testGoogleSheetsConnection() {
         console.log('🧪 Testing Google Sheets connection...');
-        console.log('🧪 Current URL:', 'https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec');
+        console.log('🧪 Current URL:', 'https://script.google.com/macros/s/AKfycbwb9-rmahgBEGP0RVRpRxDvUOqc8qrfrwY6_ZmgfTb3VUiqpwOfAbRKkaLB7mMVrS98/exec');
         
         const testData = {
             timestamp: new Date().toISOString(),
@@ -773,7 +773,7 @@ class ChristmasCardGame {
         
         try {
             // Try with CORS mode first to see response
-            const response = await fetch('https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec', {
+            const response = await fetch('https://script.google.com/macros/s/AKfycbwb9-rmahgBEGP0RVRpRxDvUOqc8qrfrwY6_ZmgfTb3VUiqpwOfAbRKkaLB7mMVrS98/exec', {
                 method: 'POST',
                 mode: 'cors', // Try CORS first
                 headers: {
@@ -793,7 +793,7 @@ class ChristmasCardGame {
             
             // Fallback to no-cors
             try {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwb9-rmahgBEGP0RVRpRxDvUOqc8qrfrwY6_ZmgfTb3VUiqpwOfAbRKkaLB7mMVrS98/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
@@ -810,11 +810,14 @@ class ChristmasCardGame {
         }
     }
     
-    submitToGoogleSheets(data) {
+    async submitToGoogleSheets(data) {
         // Google Apps Script Web App URL - Updated to new deployment
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwb9-rmahgBEGP0RVRpRxDvUOqc8qrfrwY6_ZmgfTb3VUiqpwOfAbRKkaLB7mMVrS98/exec';
         
-        // Prepare data for Google Sheets
+        // Detect mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Prepare data for Google Sheets with additional mobile info
         const payload = {
             action: 'addGameResult',
             data: {
@@ -825,34 +828,198 @@ class ChristmasCardGame {
                 moves: data.moves,
                 matches: data.matches,
                 playDate: data.playDate,
-                device: data.device,
-                gameStatus: data.gameStatus
+                device: data.device + (isMobile ? ' (Mobile)' : ' (Desktop)'),
+                gameStatus: data.gameStatus,
+                userAgent: navigator.userAgent.substring(0, 100), // Limit length
+                screenSize: window.screen ? `${window.screen.width}x${window.screen.height}` : 'unknown'
             }
         };
         
         console.log('📤 Sending data to Google Sheets:', payload);
+        console.log('📱 Is Mobile:', isMobile);
+        console.log('🌐 User Agent:', navigator.userAgent);
         
-        // Send to Google Apps Script
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload)
-        })
-        .then(response => {
-            // Note: In no-cors mode, we can't read the response
-            // But if we reach here, the request was sent successfully
-            console.log('✅ Request sent to Google Sheets (no-cors mode)');
-            this.showSaveNotification('✅ Đã lưu vào bảng xếp hạng!');
-        })
-        .catch(error => {
-            console.error('❌ Error sending to Google Sheets:', error);
+        // Show immediate feedback
+        this.showSaveNotification('📤 Đang lưu kết quả...');
+        
+        try {
+            // Try multiple approaches for better mobile compatibility
+            let success = false;
+            
+            // Approach 1: Standard no-cors (works on most browsers)
+            try {
+                console.log('🔄 Trying no-cors approach...');
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                console.log('✅ No-cors request sent:', response.type);
+                success = true;
+                
+            } catch (noCorsError) {
+                console.log('⚠️ No-cors failed:', noCorsError.message);
+                
+                // Approach 2: Try CORS (might work on some mobile browsers)
+                try {
+                    console.log('🔄 Trying CORS approach...');
+                    const corsResponse = await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    const result = await corsResponse.text();
+                    console.log('✅ CORS request successful:', result);
+                    success = true;
+                    
+                } catch (corsError) {
+                    console.log('⚠️ CORS also failed:', corsError.message);
+                }
+            }
+            
+            // Approach 3: Fallback with form data (for very restrictive mobile browsers)
+            if (!success && isMobile) {
+                try {
+                    console.log('🔄 Trying form data approach for mobile...');
+                    const formData = new FormData();
+                    formData.append('data', JSON.stringify(payload));
+                    
+                    const formResponse = await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: formData
+                    });
+                    
+                    console.log('✅ Form data request sent:', formResponse.type);
+                    success = true;
+                    
+                } catch (formError) {
+                    console.log('⚠️ Form data also failed:', formError.message);
+                }
+            }
+            
+            if (success) {
+                console.log('✅ Data successfully sent to Google Sheets');
+                this.showSaveNotification('✅ Đã lưu vào bảng xếp hạng!');
+                
+                // Store locally as backup
+                this.storeLocalBackup(payload);
+                
+            } else {
+                throw new Error('All submission approaches failed');
+            }
+            
+        } catch (error) {
+            console.error('❌ All approaches failed:', error);
             console.error('❌ Error details:', error.message);
             console.error('❌ Data that failed to send:', payload);
-            this.showSaveNotification('⚠️ Lỗi kết nối - Kiểm tra mạng');
-        });
+            
+            // Store locally for retry later
+            this.storeLocalBackup(payload);
+            
+            this.showSaveNotification('⚠️ Lỗi kết nối - Đã lưu tạm thời');
+            
+            // Try to retry after a delay
+            setTimeout(() => {
+                console.log('🔄 Retrying submission...');
+                this.retrySubmission(payload);
+            }, 3000);
+        }
+    }
+    
+    // Store data locally as backup
+    storeLocalBackup(payload) {
+        try {
+            const backups = JSON.parse(localStorage.getItem('gameBackups') || '[]');
+            backups.push({
+                ...payload,
+                backupTime: new Date().toISOString(),
+                submitted: false
+            });
+            
+            // Keep only last 10 backups
+            if (backups.length > 10) {
+                backups.splice(0, backups.length - 10);
+            }
+            
+            localStorage.setItem('gameBackups', JSON.stringify(backups));
+            console.log('💾 Data backed up locally');
+            
+        } catch (storageError) {
+            console.log('⚠️ Local storage failed:', storageError.message);
+        }
+    }
+    
+    // Retry submission
+    async retrySubmission(payload) {
+        try {
+            console.log('🔄 Retrying submission...');
+            
+            const response = await fetch(payload.url || 'https://script.google.com/macros/s/AKfycbwb9-rmahgBEGP0RVRpRxDvUOqc8qrfrwY6_ZmgfTb3VUiqpwOfAbRKkaLB7mMVrS98/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            console.log('✅ Retry successful');
+            this.showSaveNotification('✅ Đã lưu thành công (retry)!');
+            
+            // Mark as submitted in local storage
+            this.markBackupAsSubmitted(payload);
+            
+        } catch (retryError) {
+            console.log('⚠️ Retry also failed:', retryError.message);
+        }
+    }
+    
+    // Mark backup as submitted
+    markBackupAsSubmitted(payload) {
+        try {
+            const backups = JSON.parse(localStorage.getItem('gameBackups') || '[]');
+            const updated = backups.map(backup => {
+                if (backup.data.timestamp === payload.data.timestamp) {
+                    return { ...backup, submitted: true };
+                }
+                return backup;
+            });
+            localStorage.setItem('gameBackups', JSON.stringify(updated));
+            
+        } catch (error) {
+            console.log('⚠️ Failed to mark backup as submitted:', error.message);
+        }
+    }
+    
+    // Check for pending backups and retry submission
+    checkPendingBackups() {
+        try {
+            const backups = JSON.parse(localStorage.getItem('gameBackups') || '[]');
+            const pending = backups.filter(backup => !backup.submitted);
+            
+            if (pending.length > 0) {
+                console.log(`📤 Found ${pending.length} pending backups, retrying...`);
+                this.showSaveNotification(`📤 Đang gửi lại ${pending.length} kết quả...`);
+                
+                pending.forEach((backup, index) => {
+                    setTimeout(() => {
+                        this.retrySubmission(backup);
+                    }, index * 2000); // Stagger retries
+                });
+            }
+            
+        } catch (error) {
+            console.log('⚠️ Failed to check pending backups:', error.message);
+        }
     }
     
     showSaveNotification(message) {
@@ -951,7 +1118,7 @@ class ChristmasCardGame {
             }
         };
         
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwb9-rmahgBEGP0RVRpRxDvUOqc8qrfrwY6_ZmgfTb3VUiqpwOfAbRKkaLB7mMVrS98/exec';
         
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
@@ -1198,7 +1365,7 @@ function quickTest() {
     
     console.log('🚀 Sending:', testPayload);
     
-    fetch('https://script.google.com/macros/s/AKfycbys-t8yLgORCrTmvrMeXoGrSrr9sRe-ZnQrYvPMLg09jOSSk9yDv2a0ZWc9cbBSF6C-pA/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbwb9-rmahgBEGP0RVRpRxDvUOqc8qrfrwY6_ZmgfTb3VUiqpwOfAbRKkaLB7mMVrS98/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: {
@@ -1275,6 +1442,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         game = new ChristmasCardGame();
+        
+        // Check for pending backups after a short delay
+        setTimeout(() => {
+            if (game && typeof game.checkPendingBackups === 'function') {
+                game.checkPendingBackups();
+            }
+        }, 3000);
         
         // Make test functions globally available
         window.testGoogleSheets = testGoogleSheets;
